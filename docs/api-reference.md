@@ -1,6 +1,6 @@
-# API Reference
+# Safaricom Daraja API Reference & M-Pesa Request DTO Contracts
 
-This SDK treats the request DTO as the contract for each Daraja endpoint.
+This reference guide documents the API contracts for the PHP 8.2+ Safaricom Daraja SDK. It provides a framework-agnostic PHP core with typed DTOs, Guzzle 7 transport, and optional Laravel support for Daraja and M-Pesa workflows. Each M-Pesa API request maps to a specific, type-safe Request DTO.
 
 - The DTO constructor shows the required inputs.
 - `toArray()` shows the exact Safaricom field names sent on the wire.

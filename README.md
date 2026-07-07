@@ -1,8 +1,12 @@
-# Safaricom Daraja SDK
+# PHP Safaricom Daraja SDK (M-Pesa API Integration)
 
-PHP 8.2+ Safaricom Daraja SDK for production payment integrations across web and mobile apps. It provides a framework-agnostic PHP core with typed DTOs, Guzzle 7 transport, and optional Laravel support for Daraja and M-Pesa workflows.
+[![PHP Version](https://img.shields.io/badge/php-%5E8.2-blue.svg)](https://packagist.org/packages/statum/safaricom-daraja-sdk)
+[![Latest Stable Version](https://img.shields.io/packagist/v/statum/safaricom-daraja-sdk.svg)](https://packagist.org/packages/statum/safaricom-daraja-sdk)
+[![License](https://img.shields.io/packagist/l/statum/safaricom-daraja-sdk.svg)](https://packagist.org/packages/statum/safaricom-daraja-sdk)
 
-## What it covers
+A PHP 8.2+ Safaricom Daraja SDK for production payment integrations across web and mobile apps. It provides a framework-agnostic PHP core with typed DTOs, Guzzle 7 transport, and optional Laravel support for Daraja and M-Pesa workflows.
+
+## Features & Supported Services
 
 This SDK follows the current Safaricom developer portal and the verified endpoint contracts in this repository. It includes:
 

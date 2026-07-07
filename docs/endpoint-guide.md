@@ -1,6 +1,6 @@
-# Endpoint Guide
+# Safaricom M-Pesa Endpoint Integration Guide
 
-This is the helper-to-contract map for the SDK.
+This guide maps each M-Pesa API helper to its corresponding contract and request DTO in the PHP 8.2+ Safaricom Daraja SDK. It provides a framework-agnostic PHP core with typed DTOs, Guzzle 7 transport, and optional Laravel support for production payment integrations across web and mobile apps.
 
 Use this file when you need to:
 
