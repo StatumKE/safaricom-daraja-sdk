@@ -54,6 +54,15 @@ This SDK treats the request DTO as the contract for each Daraja endpoint.
 | SIM Suspend / Unsuspend | `suspendUnsuspendSub()` | `SuspendUnsuspendSubRequest` | `msisdn`, `username`, `vpnGroup`, `product`, `operation` |  |
 | SWAP CheckATI | `swapCheckAti()` | `SwapCheckAtiRequest` | `customerNumber` | Uses the collection payload shape. |
 
+## Special Cases
+
+- `b2bPaymentRequest()` and `reversalRequest()` map the receiver identifier field to Safaricom’s `RecieverIdentifierType` wire key.
+- `pullQuery()` maps the DTO `offsetValue` property to the wire key `OffSetValue`.
+- `allSims()` accepts `vpnGroup` as an array of strings.
+- `b2cPaymentRequest()`, `b2PochiPaymentRequest()`, and `reversalRequest()` expose `occasion` as optional and omit it from the payload when `null`.
+- `searchMessages()`, `filterMessages()`, and `getAllMessages()` accept pagination as helper arguments so the DTO stays focused on the request body.
+- `imsiCheckAtiV1()`, `imsiCheckAtiV2()`, `ageOnNetwork()`, and `swapCheckAti()` are single-field DTOs that only require `customerNumber`.
+
 ## Practical rule
 
 If a field is required by the API, it is required by the DTO constructor.

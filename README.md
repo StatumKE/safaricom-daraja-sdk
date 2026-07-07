@@ -134,6 +134,76 @@ The SDK is framework-agnostic, but it also ships an optional Laravel service pro
 - Config file: `config/safaricom-daraja.php`
 - The published config reads `SAFARICOM_*` environment variables by default.
 
+### Installation
+
+In a Laravel application:
+
+```bash
+composer require statum/safaricom-daraja-sdk
+php artisan vendor:publish --tag=safaricom-daraja-config
+```
+
+The package auto-discovers the service provider, so no manual provider registration is required.
+
+### Configuration
+
+Update your `.env` file with the required values:
+
+```env
+SAFARICOM_CONSUMER_KEY=your-consumer-key
+SAFARICOM_CONSUMER_SECRET=your-consumer-secret
+SAFARICOM_ENVIRONMENT=sandbox
+SAFARICOM_TIMEOUT=30
+SAFARICOM_CONNECT_TIMEOUT=10
+```
+
+The published config uses these keys:
+
+- `consumer_key`
+- `consumer_secret`
+- `environment`
+- `timeout`
+- `connect_timeout`
+- `default_headers`
+
+`default_headers` is an array and is merged into the outgoing request headers.
+
+### Usage
+
+Resolve the client from Laravel’s container and use the typed helper methods:
+
+```php
+use Statum\Safaricom\Daraja\Client\SafaricomClient;
+use Statum\Safaricom\Daraja\Dto\Request\StkPushRequest;
+
+public function store(SafaricomClient $client)
+{
+    $response = $client->stkPush(new StkPushRequest(
+        businessShortCode: '174379',
+        password: 'BASE64_PASSWORD',
+        timestamp: '20260707120000',
+        transactionType: 'CustomerPayBillOnline',
+        amount: 1,
+        partyA: 254708374149,
+        partyB: 174379,
+        phoneNumber: 254708374149,
+        callBackURL: 'https://example.com/callback',
+        accountReference: 'CompanyXLTD',
+        transactionDesc: 'Payment of X',
+    ));
+
+    return response()->json($response->json());
+}
+```
+
+If you need the raw client in a service class, constructor injection works the same way:
+
+```php
+public function __construct(private readonly SafaricomClient $client)
+{
+}
+```
+
 If you are not using Laravel, you can ignore the provider entirely.
 
 ## Running tests

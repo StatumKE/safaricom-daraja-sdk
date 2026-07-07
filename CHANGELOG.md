@@ -14,3 +14,6 @@
 - Removed the optional production-readiness checklist from the public docs.
 - Expanded the README, endpoint guide, and API reference so developers can see required inputs, optional inputs, and usage flow without guessing.
 - Expanded `docs/endpoints.md` with an endpoint contract matrix including helper, DTO, path, and auth mode for every supported flow.
+- Added Laravel install, configuration, and usage examples to the README.
+- Added special-case contract notes to `docs/api-reference.md` for optional and wire-mapped fields.
+- Clarified the Laravel environment values and publish/config workflow in the README.
