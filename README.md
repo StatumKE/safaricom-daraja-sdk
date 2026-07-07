@@ -1,6 +1,6 @@
 # Safaricom Daraja SDK
 
-PHP 8.2+ Safaricom Daraja SDK for M-Pesa APIs with typed DTOs, Guzzle 7, and optional Laravel support.
+PHP 8.2+ Safaricom Daraja SDK for payment integrations across web and mobile apps, with typed DTOs, Guzzle 7, and optional Laravel support.
 
 ## What it covers
 
