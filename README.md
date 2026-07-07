@@ -1,18 +1,18 @@
 # Safaricom Daraja SDK
 
-PHP 8.2+ Safaricom Daraja SDK for building secure payment integrations across web and mobile apps. It ships with typed DTOs, Guzzle 7, and optional Laravel support for production-oriented Daraja and M-Pesa workflows.
+PHP 8.2+ Safaricom Daraja SDK for production payment integrations across web and mobile apps. It provides a framework-agnostic PHP core with typed DTOs, Guzzle 7 transport, and optional Laravel support for Daraja and M-Pesa workflows.
 
 ## What it covers
 
-This SDK is based on the current Safaricom developer portal and verified Daraja endpoint contracts. It exposes:
+This SDK follows the current Safaricom developer portal and the verified endpoint contracts in this repository. It includes:
 
-- A generic `request()` method for any Daraja endpoint
-- Typed request DTOs for every endpoint covered by the SDK
-- OAuth access token acquisition
-- Safaricom M-Pesa helpers for the covered Daraja endpoints
-- STK password generation
+- A framework-agnostic `request()` method for Daraja endpoints
+- Typed request DTOs for every covered endpoint
+- OAuth access token acquisition and bearer token handling
+- Helper methods for the supported Daraja and M-Pesa flows
+- STK password generation from shortcode, passkey, and timestamp
 - Security credential generation from Safaricom public certificates
-- PHPUnit tests using Guzzle `MockHandler`
+- PHPUnit coverage with Guzzle `MockHandler`
 
 ## Installation
 
