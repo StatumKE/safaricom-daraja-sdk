@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## [Unreleased]
+
+## [1.0.0] - 2026-07-07
 
 - Added typed request DTOs for Daraja endpoints.
 - Added optional Laravel service provider and publishable config.
