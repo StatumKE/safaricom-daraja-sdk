@@ -9,32 +9,53 @@ use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
 /**
  * Typed request DTO for Safaricom Daraja.
  *
- * @property-read string $businessShortCode
- * @property-read string $password
- * @property-read string $timestamp
- * @property-read string $checkoutRequestID
+ * @property-read string $initiator
+ * @property-read string $securityCredential
+ * @property-read string $commandID
+ * @property-read string $transactionID
+ * @property-read int|string $partyA
+ * @property-read int|string $identifierType
+ * @property-read string $remarks
+ * @property-read string $queueTimeOutURL
+ * @property-read string $resultURL
+ * @property-read null|string $occasion
  */
 final class TransactionStatusQueryRequest extends AbstractRequestDto implements RequestDtoInterface
 {
     public function __construct(
-        public readonly string $businessShortCode,
-        public readonly string $password,
-        public readonly string $timestamp,
-        public readonly string $checkoutRequestID
+        public readonly string $initiator,
+        public readonly string $securityCredential,
+        public readonly string $commandID,
+        public readonly string $transactionID,
+        public readonly int|string $partyA,
+        public readonly int|string $identifierType,
+        public readonly string $remarks,
+        public readonly string $queueTimeOutURL,
+        public readonly string $resultURL,
+        public readonly ?string $occasion = null
     ) {
-        self::requireNonEmptyString($this->businessShortCode, 'businessShortCode');
-        self::requireNonEmptyString($this->password, 'password');
-        self::requireNonEmptyString($this->timestamp, 'timestamp');
-        self::requireNonEmptyString($this->checkoutRequestID, 'checkoutRequestID');
+        self::requireNonEmptyString($this->initiator, 'initiator');
+        self::requireNonEmptyString($this->securityCredential, 'securityCredential');
+        self::requireNonEmptyString($this->commandID, 'commandID');
+        self::requireNonEmptyString($this->transactionID, 'transactionID');
+        self::requireNonEmptyString($this->remarks, 'remarks');
+        self::requireNonEmptyString($this->queueTimeOutURL, 'queueTimeOutURL');
+        self::requireNonEmptyString($this->resultURL, 'resultURL');
     }
 
     public function toArray(): array
     {
-        return [
-            'BusinessShortCode' => $this->businessShortCode,
-            'Password' => $this->password,
-            'Timestamp' => $this->timestamp,
-            'CheckoutRequestID' => $this->checkoutRequestID,
-        ];
+        return self::withoutNulls([
+            'Initiator' => $this->initiator,
+            'SecurityCredential' => $this->securityCredential,
+            'CommandID' => $this->commandID,
+            'TransactionID' => $this->transactionID,
+            'PartyA' => $this->partyA,
+            'IdentifierType' => $this->identifierType,
+            'Remarks' => $this->remarks,
+            'QueueTimeOutURL' => $this->queueTimeOutURL,
+            'ResultURL' => $this->resultURL,
+            'Occasion' => $this->occasion,
+        ]);
     }
 }

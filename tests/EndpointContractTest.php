@@ -133,7 +133,7 @@ final class EndpointContractTest extends TestCase
         ];
 
         yield 'transaction status' => [
-            static fn (SafaricomClient $client): mixed => $client->transactionStatusQuery(new TransactionStatusQueryRequest('174379', 'password', '20260707120000', 'ws_CO_123456789')),
+            static fn (SafaricomClient $client): mixed => $client->transactionStatusQuery(new TransactionStatusQueryRequest('testapi', 'credential', 'TransactionStatusQuery', 'OHT123456', 600000, 4, 'Remarks', 'https://example.com/timeout', 'https://example.com/result')),
             '/mpesa/transactionstatus/v1/query',
         ];
 

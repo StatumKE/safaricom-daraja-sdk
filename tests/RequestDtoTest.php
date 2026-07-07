@@ -88,12 +88,18 @@ final class RequestDtoTest extends TestCase
         ];
 
         yield 'transaction status query' => [
-            new TransactionStatusQueryRequest('174379', 'password', '20260707120000', 'ws_CO_123456789'),
+            new TransactionStatusQueryRequest('testapi', 'credential', 'TransactionStatusQuery', 'OHT123456', 600000, 4, 'Status query remark', 'https://example.com/timeout', 'https://example.com/result', 'Status check occasion'),
             [
-                'BusinessShortCode' => '174379',
-                'Password' => 'password',
-                'Timestamp' => '20260707120000',
-                'CheckoutRequestID' => 'ws_CO_123456789',
+                'Initiator' => 'testapi',
+                'SecurityCredential' => 'credential',
+                'CommandID' => 'TransactionStatusQuery',
+                'TransactionID' => 'OHT123456',
+                'PartyA' => 600000,
+                'IdentifierType' => 4,
+                'Remarks' => 'Status query remark',
+                'QueueTimeOutURL' => 'https://example.com/timeout',
+                'ResultURL' => 'https://example.com/result',
+                'Occasion' => 'Status check occasion',
             ],
         ];
 
