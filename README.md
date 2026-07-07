@@ -2,7 +2,7 @@
 
 [![PHP Version](https://img.shields.io/badge/php-%5E8.2-blue.svg)](https://packagist.org/packages/statum/safaricom-daraja-sdk)
 [![Latest Stable Version](https://img.shields.io/packagist/v/statum/safaricom-daraja-sdk.svg)](https://packagist.org/packages/statum/safaricom-daraja-sdk)
-[![License](https://img.shields.io/packagist/l/statum/safaricom-daraja-sdk.svg)](https://packagist.org/packages/statum/safaricom-daraja-sdk)
+[![License](https://img.shields.io/github/license/StatumKE/safaricom-daraja-sdk.svg)](https://github.com/StatumKE/safaricom-daraja-sdk/blob/master/LICENSE)
 
 A PHP 8.2+ Safaricom Daraja SDK for production payment, IoT SIM portal management, and GSM/network-level utility integrations across web and mobile apps. It provides a framework-agnostic PHP core with typed DTOs, Guzzle 7 transport, and optional Laravel support for M-Pesa, IoT, and GSM workflows.
 
