@@ -30,17 +30,44 @@ Each section shows:
 
 ## Endpoint Summary
 
-| Domain | Helper | DTO | Notes |
-| --- | --- | --- | --- |
-| OAuth | `accessToken()` | n/a | Returns the bearer token object used by all other helper methods. |
-| M-Pesa Express | `stkPush()`, `stkPushQuery()` | `StkPushRequest`, `StkPushQueryRequest` | STK push initiation and status query. |
-| C2B | `c2bSimulate()`, `c2bRegisterUrl()` | `C2bSimulateRequest`, `C2bRegisterUrlRequest` | Simulation and callback registration. |
-| B2B / B2C | `b2bPaymentRequest()`, `b2cPaymentRequest()`, `b2PochiPaymentRequest()` | `B2bPaymentRequest`, `B2cPaymentRequest`, `B2PochiPaymentRequest` | Business disbursement and Pochi flows. |
-| Reversal and balances | `reversalRequest()`, `accountBalanceQuery()`, `transactionStatusQuery()` | `ReversalRequest`, `AccountBalanceRequest`, `TransactionStatusQueryRequest` | Transaction operations and account reporting. |
-| IMSI / network | `imsiCheckAtiV1()`, `imsiCheckAtiV2()`, `ageOnNetwork()`, `swapCheckAti()` | `ImsiCheckAtiRequest`, `ImsiLookupRequest`, `AgeOnNetworkRequest`, `SwapCheckAtiRequest` | Network identity and age checks. |
-| Pull transactions | `pullRegister()`, `pullQuery()` | `PullRegisterRequest`, `PullQueryRequest` | Registration and query for pull transaction flows. |
-| SIM portal | `searchMessages()`, `filterMessages()`, `deleteMessageThread()`, `getAllMessages()`, `sendSingleMessage()`, `deleteMessage()`, `allSims()`, `queryLifecycleStatus()`, `queryCustomerInfo()`, `simActivation()`, `getActivationTrends()`, `renameAsset()`, `getLocationInfo()`, `suspendUnsuspendSub()` | SIM portal DTOs | Query and management operations for SIM portal products. |
-| Other utilities | `b2bHakikisha()`, `mobileNumberValidation()`, `standingOrderExternal()` | `B2bHakikishaRequest`, `MobileNumberValidationRequest`, `StandingOrderExternalRequest` | Validation and standing order flows. |
+| Domain | Helper | DTO | Endpoint path | Auth |
+| --- | --- | --- | --- | --- |
+| OAuth | `accessToken()` | n/a | `/oauth/v1/generate` | HTTP Basic auth |
+| M-Pesa Express | `stkPush()` | `StkPushRequest` | `/mpesa/stkpush/v1/processrequest` | Bearer token handled by the SDK |
+| M-Pesa Express | `stkPushQuery()` | `StkPushQueryRequest` | `/mpesa/stkpushquery/v1/query` | Bearer token handled by the SDK |
+| C2B | `c2bSimulate()` | `C2bSimulateRequest` | `/mpesa/c2b/v1/simulate` | Bearer token handled by the SDK |
+| C2B | `c2bRegisterUrl()` | `C2bRegisterUrlRequest` | `/mpesa/c2b/v1/registerurl` | Bearer token handled by the SDK |
+| B2B | `b2bPaymentRequest()` | `B2bPaymentRequest` | `/mpesa/b2b/v1/paymentrequest` | Bearer token handled by the SDK |
+| B2C | `b2cPaymentRequest()` | `B2cPaymentRequest` | `/mpesa/b2c/v1/paymentrequest` | Bearer token handled by the SDK |
+| B2C | `b2PochiPaymentRequest()` | `B2PochiPaymentRequest` | `/mpesa/b2c/v1/paymentrequest` | Bearer token handled by the SDK |
+| Reversal | `reversalRequest()` | `ReversalRequest` | `/mpesa/reversal/v1/request` | Bearer token handled by the SDK |
+| Account balance | `accountBalanceQuery()` | `AccountBalanceRequest` | `/mpesa/accountbalance/v1/query` | Bearer token handled by the SDK |
+| Transaction status | `transactionStatusQuery()` | `TransactionStatusQueryRequest` | `/mpesa/transactionstatus/v1/query` | Bearer token handled by the SDK |
+| IMSI | `imsiCheckAtiV1()` | `ImsiCheckAtiRequest` | `/imsi/v1/checkATI` | Bearer token handled by the SDK |
+| IMSI | `imsiCheckAtiV2()` | `ImsiLookupRequest` | `/imsi-lookup/v1/checkATI` | Bearer token handled by the SDK |
+| IMSI | `ageOnNetwork()` | `AgeOnNetworkRequest` | `/registration/lookup/v1/checkATI` | Bearer token handled by the SDK |
+| Pull transactions | `pullRegister()` | `PullRegisterRequest` | `/pulltransactions/v1/register` | Bearer token handled by the SDK |
+| Pull transactions | `pullQuery()` | `PullQueryRequest` | `/pulltransactions/v1/query` | Bearer token handled by the SDK |
+| SIM portal | `searchMessages()` | `SearchMessagesRequest` | `/simportal/v1/searchmessages` | Bearer token handled by the SDK |
+| SIM portal | `filterMessages()` | `FilterMessagesRequest` | `/simportal/v1/filtermessages` | Bearer token handled by the SDK |
+| SIM portal | `deleteMessageThread()` | `DeleteMessageThreadRequest` | `/simportal/v1/deleteMessageThread` | Bearer token handled by the SDK |
+| SIM portal | `getAllMessages()` | `GetAllMessagesRequest` | `/simportal/v1/getallmessages` | Bearer token handled by the SDK |
+| SIM portal | `sendSingleMessage()` | `SendSingleMessageRequest` | `/simportal/v1/sendsinglemessage` | Bearer token handled by the SDK |
+| SIM portal | `deleteMessage()` | `DeleteMessageRequest` | `/simportal/v1/deletemessage` | Bearer token handled by the SDK |
+| SIM portal | `allSims()` | `AllSimsRequest` | `/simportal/v1/allsims` | Bearer token handled by the SDK |
+| SIM portal | `queryLifecycleStatus()` | `QueryLifecycleStatusRequest` | `/simportal/v1/queryLifeCycleStatus` | Bearer token handled by the SDK |
+| SIM portal | `queryCustomerInfo()` | `QueryCustomerInfoRequest` | `/simportal/v1/querycustomerinfo` | Bearer token handled by the SDK |
+| SIM portal | `simActivation()` | `SimActivationRequest` | `/simportal/v1/simactivation` | Bearer token handled by the SDK |
+| SIM portal | `getActivationTrends()` | `GetActivationTrendsRequest` | `/simportal/v1/getactivationtrends` | Bearer token handled by the SDK |
+| SIM portal | `renameAsset()` | `RenameAssetRequest` | `/simportal/v1/renameasset` | Bearer token handled by the SDK |
+| SIM portal | `getLocationInfo()` | `GetLocationInfoRequest` | `/simportal/v1/getlocationinfo` | Bearer token handled by the SDK |
+| SIM portal | `suspendUnsuspendSub()` | `SuspendUnsuspendSubRequest` | `/simportal/v1/suspend_unsuspend_sub` | Bearer token handled by the SDK |
+| Utilities | `b2bHakikisha()` | `B2bHakikishaRequest` | `/sfcverify/v1/query/info` | Bearer token handled by the SDK |
+| Utilities | `mobileNumberValidation()` | `MobileNumberValidationRequest` | `/v1/KYC-validation/validateID` | Bearer token handled by the SDK |
+| Utilities | `standingOrderExternal()` | `StandingOrderExternalRequest` | `/standingorder/v1/createStandingOrderExternal` | Bearer token handled by the SDK |
+| IMSI | `swapCheckAti()` | `SwapCheckAtiRequest` | `/imsi/v2/checkATI` | Bearer token handled by the SDK |
+
+For the exact required inputs and wire-level field names for each DTO, open [docs/api-reference.md](api-reference.md).
 
 ## OAuth Access Token
 
@@ -253,6 +280,7 @@ $response = $client->b2bPaymentRequest($request);
 - Helper: `b2cPaymentRequest()`
 - DTO: `B2cPaymentRequest`
 - Required: `initiatorName`, `securityCredential`, `commandID`, `amount`, `partyA`, `partyB`, `remarks`, `queueTimeOutURL`, `resultURL`, `occasion`
+- Optional: `occasion`
 
 ```php
 <?php
@@ -292,6 +320,7 @@ $response = $client->b2cPaymentRequest($request);
 - Helper: `b2PochiPaymentRequest()`
 - DTO: `B2PochiPaymentRequest`
 - Required: `originatorConversationID`, `initiatorName`, `securityCredential`, `commandID`, `amount`, `partyA`, `partyB`, `remarks`, `queueTimeOutURL`, `resultURL`, `occasion`
+- Optional: `occasion`
 
 ```php
 <?php
@@ -332,6 +361,7 @@ $response = $client->b2PochiPaymentRequest($request);
 - Helper: `reversalRequest()`
 - DTO: `ReversalRequest`
 - Required: `initiator`, `securityCredential`, `commandID`, `transactionID`, `amount`, `receiverParty`, `receiverIdentifierType`, `resultURL`, `queueTimeOutURL`, `remarks`, `occasion`
+- Optional: `occasion`
 
 ```php
 <?php
