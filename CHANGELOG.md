@@ -20,3 +20,5 @@
 - Removed the duplicated endpoint matrix from `docs/api-reference.md`; the helper/path summary now lives only in `docs/endpoint-guide.md`.
 - Expanded the README with getting started, common flows, response handling, and error handling guidance.
 - Consolidated README code samples into a dedicated `Examples` section for faster developer scanning.
+- Moved the README PHP sample code into `docs/examples.md` and clarified that the STK passkey is a flow-specific secret, not a global client config property.
+- Improved the package and README description text for better search relevance around Safaricom Daraja, M-Pesa, Guzzle, and Laravel.

@@ -1,6 +1,6 @@
 {
     "name": "statum/safaricom-daraja-sdk",
-    "description": "PHP 8.2+ SDK for Safaricom Daraja APIs using Guzzle HTTP client.",
+    "description": "PHP 8.2+ Safaricom Daraja SDK for M-Pesa APIs with typed DTOs, Guzzle 7, and optional Laravel support.",
     "homepage": "https://developer.safaricom.co.ke/apis",
     "type": "library",
     "license": "MIT",
@@ -8,6 +8,7 @@
         "safaricom",
         "daraja",
         "mpesa",
+        "laravel",
         "guzzle",
         "sdk",
         "payments"
