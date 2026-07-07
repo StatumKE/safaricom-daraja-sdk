@@ -28,6 +28,28 @@ Each section lists:
 - Optional DTO fields are nullable and omitted from the payload when `null`.
 - If you need exact field names or optional inputs, open [docs/api-reference.md](api-reference.md).
 
+```mermaid
+flowchart TD
+    A["Set env values"] --> B["Create SafaricomConfig"]
+    B --> C["Create SafaricomClient"]
+    C --> D["Choose a helper"]
+    D --> E["Instantiate the matching DTO"]
+    E --> F["Call the helper or request()"]
+    F --> G["SDK obtains OAuth token when needed"]
+    G --> H["Send the request through Guzzle"]
+    H --> I["Read the ApiResponse"]
+```
+
+## Flow Map
+
+Use this guide to choose the right sequence before you read the endpoint table:
+
+- STK Push: build the password, create `StkPushRequest`, call `stkPush()`, then wait for the callback or query the checkout request ID.
+- C2B: register the callback URLs once, then use `c2bSimulate()` in sandbox to validate the callback path.
+- B2B and B2C: create the request DTO, send it, then persist the response for reconciliation and audit.
+- Reversal, balance, and transaction status: call these after a live transaction or operational event, not as the first step in the flow.
+- SIM portal, IMSI, pull transactions, and utility helpers: treat these as direct request/response operations where the DTO mirrors the Safaricom contract.
+
 ## Endpoint Summary
 
 | Domain | Helper | DTO | Endpoint path | Auth |

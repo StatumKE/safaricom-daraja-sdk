@@ -63,6 +63,19 @@ $config = new SafaricomConfig(
 $client = SafaricomClient::create($config);
 ```
 
+Flow overview:
+
+```mermaid
+flowchart LR
+    A["Load env config"] --> B["Create SafaricomConfig"]
+    B --> C["Create SafaricomClient"]
+    C --> D["Build typed DTO"]
+    D --> E["Call helper or request()"]
+    E --> F["SDK gets OAuth token automatically"]
+    F --> G["Send request through Guzzle"]
+    G --> H["Inspect ApiResponse"]
+```
+
 ## Documentation Map
 
 If you read one document first, read [docs/endpoint-guide.md](docs/endpoint-guide.md). It is the primary developer reference for helper-to-endpoint mapping, required fields, and request examples.
@@ -103,23 +116,23 @@ Use the helper that matches the business flow. If a helper exists, prefer it ove
 
 ### STK Push
 
-Use `stkPush()` with `StkPushRequest` when initiating an M-Pesa Express payment. See [Examples](docs/examples.md#basic-client-usage).
+Use `stkPush()` with `StkPushRequest` when initiating an M-Pesa Express payment. The flow is: build the DTO, generate the STK password, call the helper, then wait for the callback or query the checkout request ID. See [Examples](docs/examples.md#basic-client-usage).
 
 ### STK Push Query
 
-Use `stkPushQuery()` with the checkout request ID returned by the initial STK push.
+Use `stkPushQuery()` with the checkout request ID returned by the initial STK push to confirm the final payment state.
 
 ### C2B
 
-Use `c2bRegisterUrl()` once to register the confirmation and validation URLs, then use `c2bSimulate()` in sandbox to test the callback flow.
+Use `c2bRegisterUrl()` once to register the confirmation and validation URLs, then use `c2bSimulate()` in sandbox to test the callback flow. In production, Safaricom posts back to your registered endpoints.
 
 ### B2B and B2C
 
-Use `b2bPaymentRequest()` for business-to-business payouts and `b2cPaymentRequest()` for business-to-customer payouts.
+Use `b2bPaymentRequest()` for business-to-business payouts and `b2cPaymentRequest()` for business-to-customer payouts. These are request-and-response flows, so you should persist the response payload before you move on to downstream reconciliation.
 
 ### Transaction Queries
 
-Use `reversalRequest()`, `accountBalanceQuery()`, and `transactionStatusQuery()` for the operational flows Safaricom exposes as account and transaction controls.
+Use `reversalRequest()`, `accountBalanceQuery()`, and `transactionStatusQuery()` for the operational flows Safaricom exposes as account and transaction controls. These helpers are usually called after an operational event, not as the first step of a payment flow.
 
 ### Generic Request
 
