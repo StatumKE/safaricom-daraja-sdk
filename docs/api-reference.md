@@ -5,12 +5,15 @@ This SDK treats the request DTO as the contract for each Daraja endpoint.
 - The DTO constructor shows the required inputs.
 - `toArray()` shows the exact Safaricom field names sent on the wire.
 - The client helper name maps to the SDK method users should call.
+- Optional fields are nullable and omitted from the payload when they are `null`.
+- Constructor argument names are the SDK-facing names; the notes column highlights the wire-level payload names when they differ.
 
 ## How to read this
 
 - Use the DTO constructor to see required fields.
 - Use named arguments when instantiating DTOs.
 - Optional fields are nullable and omitted from the payload when not set.
+- If a field is not listed as required, check the DTO class for nullable constructor arguments and serialized payload notes.
 
 ## Endpoints
 

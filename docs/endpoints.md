@@ -1,6 +1,15 @@
-# Endpoint Index
+# Endpoint Guide
 
-This is a copy-paste index for the typed request DTOs exposed by the SDK.
+This is the practical implementation guide for the SDK.
+
+Use this file when you want to:
+
+- choose the correct helper method
+- see the DTO class to instantiate
+- copy a complete request example
+- understand how a request maps to the Safaricom endpoint
+
+Use [docs/api-reference.md](api-reference.md) when you need the exact required and optional fields for a DTO or want to confirm the payload shape at the field level.
 
 Each section shows:
 
@@ -8,6 +17,30 @@ Each section shows:
 - the DTO class to instantiate
 - the required fields
 - a minimal example
+
+## Before You Start
+
+- Build a `SafaricomConfig` with your consumer key, consumer secret, and target environment.
+- Use `Environment::Sandbox` while developing and testing.
+- The SDK automatically acquires and refreshes OAuth tokens for helper methods.
+- `accessToken()` is the only entry point that returns the raw token object.
+- Required DTO fields are constructor arguments.
+- Optional DTO fields are nullable and omitted from the payload when `null`.
+- If you need to verify exact field names or optional inputs, open [docs/api-reference.md](api-reference.md).
+
+## Endpoint Summary
+
+| Domain | Helper | DTO | Notes |
+| --- | --- | --- | --- |
+| OAuth | `accessToken()` | n/a | Returns the bearer token object used by all other helper methods. |
+| M-Pesa Express | `stkPush()`, `stkPushQuery()` | `StkPushRequest`, `StkPushQueryRequest` | STK push initiation and status query. |
+| C2B | `c2bSimulate()`, `c2bRegisterUrl()` | `C2bSimulateRequest`, `C2bRegisterUrlRequest` | Simulation and callback registration. |
+| B2B / B2C | `b2bPaymentRequest()`, `b2cPaymentRequest()`, `b2PochiPaymentRequest()` | `B2bPaymentRequest`, `B2cPaymentRequest`, `B2PochiPaymentRequest` | Business disbursement and Pochi flows. |
+| Reversal and balances | `reversalRequest()`, `accountBalanceQuery()`, `transactionStatusQuery()` | `ReversalRequest`, `AccountBalanceRequest`, `TransactionStatusQueryRequest` | Transaction operations and account reporting. |
+| IMSI / network | `imsiCheckAtiV1()`, `imsiCheckAtiV2()`, `ageOnNetwork()`, `swapCheckAti()` | `ImsiCheckAtiRequest`, `ImsiLookupRequest`, `AgeOnNetworkRequest`, `SwapCheckAtiRequest` | Network identity and age checks. |
+| Pull transactions | `pullRegister()`, `pullQuery()` | `PullRegisterRequest`, `PullQueryRequest` | Registration and query for pull transaction flows. |
+| SIM portal | `searchMessages()`, `filterMessages()`, `deleteMessageThread()`, `getAllMessages()`, `sendSingleMessage()`, `deleteMessage()`, `allSims()`, `queryLifecycleStatus()`, `queryCustomerInfo()`, `simActivation()`, `getActivationTrends()`, `renameAsset()`, `getLocationInfo()`, `suspendUnsuspendSub()` | SIM portal DTOs | Query and management operations for SIM portal products. |
+| Other utilities | `b2bHakikisha()`, `mobileNumberValidation()`, `standingOrderExternal()` | `B2bHakikishaRequest`, `MobileNumberValidationRequest`, `StandingOrderExternalRequest` | Validation and standing order flows. |
 
 ## OAuth Access Token
 

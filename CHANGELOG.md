@@ -12,3 +12,4 @@
 - Fixed IMSI v2 Lookup routing to `/imsi-lookup/v1/checkATI`; SWAP CheckATI remains routed to `/imsi/v2/checkATI`.
 - Updated CI/package metadata after verification, including current `actions/checkout` usage and package-owned support metadata.
 - Removed the optional production-readiness checklist from the public docs.
+- Expanded the README, endpoint guide, and API reference so developers can see required inputs, optional inputs, and usage flow without guessing.

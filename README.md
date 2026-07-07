@@ -7,9 +7,9 @@ PHP 8.2+ SDK for Safaricom Daraja APIs built on Guzzle 7.
 This SDK is based on the current Safaricom developer portal and verified Daraja endpoint contracts. It exposes:
 
 - A generic `request()` method for any Daraja endpoint
-- Typed request DTOs for the collection endpoints
+- Typed request DTOs for every endpoint covered by the SDK
 - OAuth access token acquisition
-- Safaricom M-Pesa helpers for the collection endpoints
+- Safaricom M-Pesa helpers for the covered Daraja endpoints
 - STK password generation
 - Security credential generation from Safaricom public certificates
 - PHPUnit tests using Guzzle `MockHandler`
@@ -110,13 +110,20 @@ The SDK includes helpers for the collection items and corresponding Daraja endpo
 
 Use `request()` if you want to call an endpoint that is not wrapped explicitly.
 
-For the exact required fields for each API, see [docs/api-reference.md](docs/api-reference.md).
-For copy-paste-ready endpoint examples, see [docs/endpoints.md](docs/endpoints.md).
+## Documentation Map
+
+Use the docs in this order:
+
+- [docs/endpoints.md](docs/endpoints.md) for a practical, developer-friendly walkthrough of each helper, DTO, and example request
+- [docs/api-reference.md](docs/api-reference.md) for the exact required fields, optional fields, and wire-level payload notes
+
 The rule is simple:
 
 - required API fields are required DTO constructor arguments
 - optional API fields are nullable constructor arguments
 - the DTO `toArray()` method shows the exact payload keys sent to Safaricom
+
+If you are implementing a new flow, start with `docs/endpoints.md`. If you are checking whether a field is required or optional, open `docs/api-reference.md`.
 
 ## Laravel support
 
