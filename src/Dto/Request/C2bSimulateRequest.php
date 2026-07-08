@@ -22,11 +22,13 @@ final class C2bSimulateRequest extends AbstractRequestDto implements RequestDtoI
         public readonly string $commandID,
         public readonly int|string $amount,
         public readonly int|string $msisdn,
-        public readonly string $billRefNumber
+        public readonly ?string $billRefNumber = null
     ) {
         self::requireNonEmptyString($this->shortCode, 'shortCode');
         self::requireNonEmptyString($this->commandID, 'commandID');
-        self::requireNonEmptyString($this->billRefNumber, 'billRefNumber');
+        if ($this->billRefNumber !== null) {
+            self::requireNonEmptyString($this->billRefNumber, 'billRefNumber');
+        }
     }
 
     public function toArray(): array
