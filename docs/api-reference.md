@@ -200,7 +200,7 @@ Used to send money from one business shortcode to another business shortcode.
 | `amount` | `Amount` | `int\|string`| Yes | Payout transaction amount |
 | `partyA` | `PartyA` | `string` | Yes | Sending organization shortcode |
 | `partyB` | `PartyB` | `string` | Yes | Receiving organization shortcode / Till |
-| `accountReference` | `accountReference` | `string` | Yes | Alphanumeric account reference |
+| `accountReference` | `AccountReference` | `string` | Yes | Alphanumeric account reference |
 | `remarks` | `Remarks` | `string` | Yes | Remarks / details (max 100 characters) |
 | `queueTimeOutURL` | `QueueTimeOutURL` | `string` | Yes | Callback URL for transaction timeout events |
 | `resultURL` | `ResultURL` | `string` | Yes | Callback URL where transaction results are POSTed |
@@ -314,6 +314,41 @@ Used to send payouts directly from an organization to an individual's Pochi La B
 | `resultURL` | `ResultURL` | `string` | Yes | Callback URL for transaction result |
 | `occasion` | `Occasion` | `?string` | No | Optional occasion string |
 
+### Example Wire Payloads
+
+<details>
+<summary><b>JSON Request</b></summary>
+
+```json
+{
+  "OriginatorConversationID": "pochi-12345",
+  "InitiatorName": "testapi",
+  "SecurityCredential": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv...",
+  "CommandID": "BusinessPayToPochi",
+  "Amount": 150,
+  "PartyA": "600000",
+  "PartyB": "254721553678",
+  "Remarks": "Pochi payment",
+  "QueueTimeOutURL": "https://your-domain.com/callbacks/timeout",
+  "ResultURL": "https://your-domain.com/callbacks/result",
+  "Occasion": "Promotion"
+}
+```
+</details>
+
+<details>
+<summary><b>JSON Response (Success - Request Accepted)</b></summary>
+
+```json
+{
+  "ConversationID": "AG_20260708_000075d9465a36331",
+  "OriginatorConversationID": "pochi-12345",
+  "ResponseCode": "0",
+  "ResponseDescription": "Accept the service request successfully."
+}
+```
+</details>
+
 ---
 
 ## 8. Transaction Reversal (`ReversalRequest`)
@@ -334,6 +369,41 @@ Used to reverse an M-Pesa transaction.
 | `remarks` | `Remarks` | `string` | Yes | Reversal reason (max 100 characters) |
 | `occasion` | `Occasion` | `?string` | No | Optional occasion string |
 
+### Example Wire Payloads
+
+<details>
+<summary><b>JSON Request</b></summary>
+
+```json
+{
+  "Initiator": "testapi",
+  "SecurityCredential": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv...",
+  "CommandID": "TransactionReversal",
+  "TransactionID": "OHT1234567",
+  "Amount": 100,
+  "ReceiverParty": "600984",
+  "RecieverIdentifierType": 11,
+  "ResultURL": "https://your-domain.com/callbacks/result",
+  "QueueTimeOutURL": "https://your-domain.com/callbacks/timeout",
+  "Remarks": "Customer reversal",
+  "Occasion": "Wrong amount entered"
+}
+```
+</details>
+
+<details>
+<summary><b>JSON Response (Success - Request Accepted)</b></summary>
+
+```json
+{
+  "ConversationID": "AG_20260708_000078a6b12345678901",
+  "OriginatorConversationID": "10819-695089-1",
+  "ResponseCode": "0",
+  "ResponseDescription": "Accept the service request successfully."
+}
+```
+</details>
+
 ---
 
 ## 9. Account Balance Query (`AccountBalanceRequest`)
@@ -350,6 +420,38 @@ Used to query the current balance of an M-Pesa shortcode.
 | `remarks` | `Remarks` | `string` | Yes | Query remarks |
 | `queueTimeOutURL` | `QueueTimeOutURL` | `string` | Yes | Timeout callback URL |
 | `resultURL` | `ResultURL` | `string` | Yes | Results callback URL |
+
+### Example Wire Payloads
+
+<details>
+<summary><b>JSON Request</b></summary>
+
+```json
+{
+  "Initiator": "testapi",
+  "SecurityCredential": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv...",
+  "CommandID": "AccountBalance",
+  "PartyA": "600984",
+  "IdentifierType": 4,
+  "Remarks": "Balance Check",
+  "QueueTimeOutURL": "https://your-domain.com/callbacks/timeout",
+  "ResultURL": "https://your-domain.com/callbacks/result"
+}
+```
+</details>
+
+<details>
+<summary><b>JSON Response (Success - Request Accepted)</b></summary>
+
+```json
+{
+  "ConversationID": "AG_20260708_000000000001",
+  "OriginatorConversationID": "0000-0000000-1",
+  "ResponseCode": "0",
+  "ResponseDescription": "Accept the service request successfully."
+}
+```
+</details>
 
 ---
 
@@ -369,6 +471,40 @@ Used to query the status of a specific M-Pesa transaction.
 | `queueTimeOutURL` | `QueueTimeOutURL` | `string` | Yes | Timeout callback URL |
 | `resultURL` | `ResultURL` | `string` | Yes | Results callback URL |
 | `occasion` | `Occasion` | `?string` | No | Optional occasion string |
+
+### Example Wire Payloads
+
+<details>
+<summary><b>JSON Request</b></summary>
+
+```json
+{
+  "Initiator": "testapi",
+  "SecurityCredential": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv...",
+  "CommandID": "TransactionStatusQuery",
+  "TransactionID": "OHT1234567",
+  "PartyA": "600984",
+  "IdentifierType": 4,
+  "Remarks": "Query status",
+  "QueueTimeOutURL": "https://your-domain.com/callbacks/timeout",
+  "ResultURL": "https://your-domain.com/callbacks/result",
+  "Occasion": "Status Check"
+}
+```
+</details>
+
+<details>
+<summary><b>JSON Response (Success - Request Accepted)</b></summary>
+
+```json
+{
+  "ConversationID": "AG_20260708_000000000002",
+  "OriginatorConversationID": "0000-0000000-2",
+  "ResponseCode": "0",
+  "ResponseDescription": "Accept the service request successfully."
+}
+```
+</details>
 
 ---
 
@@ -473,6 +609,40 @@ Used to create a standing order payment from a customer wallet to a business Pay
 | `frequency` | `Frequency` | `string` | Yes | Use `'Daily'`, `'Weekly'`, `'Monthly'`, `'Quarterly'`, `'BiAnnual'`, or `'Yearly'` |
 | `startDate` | `StartDate` | `string` | Yes | Format: `YYYY-MM-DD` |
 | `endDate` | `EndDate` | `string` | Yes | Format: `YYYY-MM-DD` |
+
+### Example Wire Payloads
+
+<details>
+<summary><b>JSON Request</b></summary>
+
+```json
+{
+  "StandingOrderName": "Monthly Subscription",
+  "BusinessShortCode": "600984",
+  "TransactionType": "Standing Order Customer Pay Bill",
+  "Amount": 500,
+  "PartyA": "254721553678",
+  "ReceiverPartyIdentifierType": "4",
+  "CallBackURL": "https://your-domain.com/callbacks/standing-order",
+  "AccountReference": "Sub-123",
+  "TransactionDesc": "Netflix Subscription",
+  "Frequency": "Monthly",
+  "StartDate": "2026-07-08",
+  "EndDate": "2027-07-08"
+}
+```
+</details>
+
+<details>
+<summary><b>JSON Response (Success)</b></summary>
+
+```json
+{
+  "ResponseCode": "0",
+  "ResponseDescription": "Success"
+}
+```
+</details>
 
 ---
 
