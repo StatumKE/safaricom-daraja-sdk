@@ -11,6 +11,7 @@ A modern, type-safe PHP 8.2+ SDK for Safaricom Daraja integration. It provides f
 ## Table of Contents
 
 - [Features](#features)
+- [Getting Started](#getting-started)
 - [Installation](#installation)
 - [Quick Start in 2 Minutes](#quick-start-in-2-minutes)
   - [1. Plain PHP Setup](#1-plain-php-setup)
@@ -35,6 +36,18 @@ A modern, type-safe PHP 8.2+ SDK for Safaricom Daraja integration. It provides f
 - **Automatic OAuth Lifecycle**: Token fetching, caching, and token refresh are handled invisibly under the hood.
 - **Full Laravel Binding**: Auto-discovered ServiceProvider binds `SafaricomClient` singleton with optional config publishing.
 - **Comprehensive API Coverage**: Payments (STK, C2B, B2B, B2C, Reversals), standing orders, SIM query, and KYC lookups.
+
+---
+
+## Getting Started
+
+1. **Sign up for a Safaricom Developer Account**: Visit the [Safaricom Developer Portal](https://developer.safaricom.co.ke/) and register a developer profile.
+2. **Create a Developer Application**:
+   - Navigate to the **My Apps** section from your developer dashboard.
+   - Click **Create New App**.
+   - Set an application name and select the API products you want to access (e.g., *M-Pesa Sandbox API*).
+   - Once created, copy the generated **Consumer Key** and **Consumer Secret** credentials.
+3. **Configure the SDK**: Follow the [Installation](#installation) and configuration guidelines below.
 
 ---
 
