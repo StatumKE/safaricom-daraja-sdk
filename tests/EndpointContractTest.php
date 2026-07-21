@@ -32,6 +32,7 @@ use Statum\Safaricom\Daraja\Dto\Request\GetAllMessagesRequest;
 use Statum\Safaricom\Daraja\Dto\Request\GetLocationInfoRequest;
 use Statum\Safaricom\Daraja\Dto\Request\ImsiCheckAtiRequest;
 use Statum\Safaricom\Daraja\Dto\Request\ImsiLookupRequest;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterPurchaseRequest;
 use Statum\Safaricom\Daraja\Dto\Request\MobileNumberValidationRequest;
 use Statum\Safaricom\Daraja\Dto\Request\PullQueryRequest;
 use Statum\Safaricom\Daraja\Dto\Request\PullRegisterRequest;
@@ -251,7 +252,13 @@ final class EndpointContractTest extends TestCase
             static fn (SafaricomClient $client): mixed => $client->swapCheckAti(new SwapCheckAtiRequest('254700000000')),
             '/imsi/v2/checkATI',
         ];
+
+        yield 'mobile center purchase' => [
+            static fn (SafaricomClient $client): mixed => $client->mobileCenterPurchase(new MobileCenterPurchaseRequest('254708374149', '28042021', 'airtime', '2572', '5', '50', '1', '12345')),
+            '/v1/dynamic-offers/facebook-bundle/purchase',
+        ];
     }
+
 
     private function tokenResponse(): Response
     {

@@ -1247,3 +1247,104 @@ $request = new SwapCheckAtiRequest(customerNumber: '254700000000');
 
 $response = $client->swapCheckAti($request);
 ```
+
+## Mobile Center: Fetch Offers
+
+- Helper: `mobileCenterFetchOffers()`
+- DTO: `MobileCenterFetchOffersRequest` (or string `$msisdn`)
+- Endpoint: `GET /v1/dynamic-offers/fetch?msisdn={msisdn}`
+- Required: `msisdn`
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Statum\Safaricom\Daraja\Client\SafaricomClient;
+use Statum\Safaricom\Daraja\Config\SafaricomConfig;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterFetchOffersRequest;
+use Statum\Safaricom\Daraja\Environment\Environment;
+
+$config = new SafaricomConfig(
+    consumerKey: 'your-consumer-key',
+    consumerSecret: 'your-consumer-secret',
+    environment: Environment::Sandbox,
+);
+
+$client = SafaricomClient::create($config);
+$request = new MobileCenterFetchOffersRequest(msisdn: '254708374149');
+
+$response = $client->mobileCenterFetchOffers($request);
+// Or pass MSISDN directly: $client->mobileCenterFetchOffers('254708374149');
+```
+
+## Mobile Center: Offer Purchase
+
+- Helper: `mobileCenterPurchase()`
+- DTO: `MobileCenterPurchaseRequest`
+- Endpoint: `POST /v1/dynamic-offers/facebook-bundle/purchase`
+- Required: `msisdn`, `offeringId`, `paymentMode`, `accountId`, `price`, `resourceAmount`, `validity`, `transactionId`
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Statum\Safaricom\Daraja\Client\SafaricomClient;
+use Statum\Safaricom\Daraja\Config\SafaricomConfig;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterPurchaseRequest;
+use Statum\Safaricom\Daraja\Environment\Environment;
+
+$config = new SafaricomConfig(
+    consumerKey: 'your-consumer-key',
+    consumerSecret: 'your-consumer-secret',
+    environment: Environment::Sandbox,
+);
+
+$client = SafaricomClient::create($config);
+$request = new MobileCenterPurchaseRequest(
+    msisdn: '254708374149',
+    offeringId: '28042021',
+    paymentMode: 'airtime', // or 'm-pesa'
+    accountId: '2572',
+    price: '5',
+    resourceAmount: '50',
+    validity: '1',
+    transactionId: '123456789'
+);
+
+$response = $client->mobileCenterPurchase($request);
+```
+
+## Mobile Center: Check Status
+
+- Helper: `mobileCenterCheckStatus()`
+- DTO: `MobileCenterCheckStatusRequest`
+- Endpoint: `GET /v2/bundles/get/status?id={id}&serviceAccountId={serviceAccountId}`
+- Required: `id`, `serviceAccountId` (defaults to 0 for dynamic offers)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Statum\Safaricom\Daraja\Client\SafaricomClient;
+use Statum\Safaricom\Daraja\Config\SafaricomConfig;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterCheckStatusRequest;
+use Statum\Safaricom\Daraja\Environment\Environment;
+
+$config = new SafaricomConfig(
+    consumerKey: 'your-consumer-key',
+    consumerSecret: 'your-consumer-secret',
+    environment: Environment::Sandbox,
+);
+
+$client = SafaricomClient::create($config);
+$request = new MobileCenterCheckStatusRequest(
+    id: '369852017112111347306',
+    serviceAccountId: 0
+);
+
+$response = $client->mobileCenterCheckStatus($request);
+```
+

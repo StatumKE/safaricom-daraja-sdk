@@ -26,7 +26,11 @@ use Statum\Safaricom\Daraja\Dto\Request\GetAllMessagesRequest;
 use Statum\Safaricom\Daraja\Dto\Request\GetLocationInfoRequest;
 use Statum\Safaricom\Daraja\Dto\Request\ImsiCheckAtiRequest;
 use Statum\Safaricom\Daraja\Dto\Request\ImsiLookupRequest;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterCheckStatusRequest;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterFetchOffersRequest;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterPurchaseRequest;
 use Statum\Safaricom\Daraja\Dto\Request\MobileNumberValidationRequest;
+use Statum\Safaricom\Daraja\Exception\ConfigurationException;
 use Statum\Safaricom\Daraja\Dto\Request\PullQueryRequest;
 use Statum\Safaricom\Daraja\Dto\Request\PullRegisterRequest;
 use Statum\Safaricom\Daraja\Dto\Request\QueryCustomerInfoRequest;
@@ -419,5 +423,68 @@ final class RequestDtoTest extends TestCase
                 'operation' => 'suspend',
             ],
         ];
+
+        yield 'mobile center fetch offers' => [
+            new MobileCenterFetchOffersRequest('254708374149'),
+            [
+                'msisdn' => '254708374149',
+            ],
+        ];
+
+        yield 'mobile center purchase' => [
+            new MobileCenterPurchaseRequest(
+                msisdn: '254708374149',
+                offeringId: '28042021',
+                paymentMode: 'airtime',
+                accountId: '2572',
+                price: '5',
+                resourceAmount: '50',
+                validity: '1',
+                transactionId: '123456789'
+            ),
+            [
+                'msisdn' => '254708374149',
+                'offeringId' => '28042021',
+                'paymentMode' => 'airtime',
+                'accountId' => '2572',
+                'price' => '5',
+                'resourceAmount' => '50',
+                'validity' => '1',
+                'transactionId' => '123456789',
+            ],
+        ];
+
+        yield 'mobile center check status' => [
+            new MobileCenterCheckStatusRequest(
+                id: '369852017112111347306',
+                serviceAccountId: 0
+            ),
+            [
+                'id' => '369852017112111347306',
+                'serviceAccountId' => '0',
+            ],
+        ];
+    }
+
+    #[Test]
+    public function itValidatesMobileCenterRequestDtoInputs(): void
+    {
+        $this->expectException(ConfigurationException::class);
+        new MobileCenterFetchOffersRequest('');
+    }
+
+    #[Test]
+    public function itValidatesMobileCenterPurchaseDtoEmptyField(): void
+    {
+        $this->expectException(ConfigurationException::class);
+        new MobileCenterPurchaseRequest('254708374149', '', 'airtime', '2572', '5', '50', '1', '1');
+    }
+
+    #[Test]
+    public function itValidatesMobileCenterCheckStatusDtoNegativeServiceAccountId(): void
+    {
+        $this->expectException(ConfigurationException::class);
+        new MobileCenterCheckStatusRequest('369852017112111347306', -1);
     }
 }
+

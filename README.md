@@ -21,6 +21,8 @@ A modern, type-safe PHP 8.2+ SDK for Safaricom Daraja integration. It provides f
   - [C2B Simulation (Paybill vs. Till)](#c2b-simulation-paybill-vs-till)
   - [B2B Hakikisha (Verify Org)](#b2b-hakikisha-verify-org)
   - [Mobile Number Validation (KYC)](#mobile-number-validation-kyc)
+  - [Mobile Center (Dynamic Offers & Data Bundles)](#mobile-center-dynamic-offers--data-bundles)
+
 - [Error & Exception Handling](#error--exception-handling)
 - [Documentation Directory](#documentation-directory)
 - [Sandbox Environment Gotchas](#sandbox-environment-gotchas)
@@ -35,7 +37,7 @@ A modern, type-safe PHP 8.2+ SDK for Safaricom Daraja integration. It provides f
 - **Type-Safe Request DTOs**: Strict constructors validate your payloads before making outgoing HTTP requests.
 - **Automatic OAuth Lifecycle**: Token fetching, caching, and token refresh are handled invisibly under the hood.
 - **Full Laravel Binding**: Auto-discovered ServiceProvider binds `SafaricomClient` singleton with optional config publishing.
-- **Comprehensive API Coverage**: Payments (STK, C2B, B2B, B2C, Reversals), standing orders, SIM query, and KYC lookups.
+- **Comprehensive API Coverage**: Payments (STK, C2B, B2B, B2C, Reversals), Mobile Center (Dynamic Offers & Data Bundles), standing orders, SIM query, and KYC lookups.
 
 ---
 
@@ -205,7 +207,43 @@ $response = $client->mobileNumberValidation($request);
 print_r($response->json());
 ```
 
+### Mobile Center (Dynamic Offers & Data Bundles)
+
+Fetch tailored data bundle offers, purchase an offer, and check asynchronous purchase status:
+
+```php
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterFetchOffersRequest;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterPurchaseRequest;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterCheckStatusRequest;
+
+// 1. Fetch available dynamic offers for MSISDN
+$offersResponse = $client->mobileCenterFetchOffers('254708374149');
+$offers = $offersResponse->json();
+
+// 2. Purchase an offer
+$purchaseRequest = new MobileCenterPurchaseRequest(
+    msisdn: '254708374149',
+    offeringId: '28042021',
+    paymentMode: 'airtime', // or 'm-pesa'
+    accountId: '2572',
+    price: '5',
+    resourceAmount: '50',
+    validity: '1',
+    transactionId: 'tx-' . uniqid()
+);
+$purchaseResponse = $client->mobileCenterPurchase($purchaseRequest);
+
+// 3. Query asynchronous purchase transaction status
+$statusRequest = new MobileCenterCheckStatusRequest(
+    id: '369852017112111347306',
+    serviceAccountId: 0 // 0 for dynamic offers
+);
+$statusResponse = $client->mobileCenterCheckStatus($statusRequest);
+print_r($statusResponse->json());
+```
+
 ---
+
 
 ## Error & Exception Handling
 

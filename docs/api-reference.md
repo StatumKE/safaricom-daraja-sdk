@@ -686,7 +686,20 @@ Used for IoT SIM and SMS thread management via the Safaricom SIM Portal APIs.
 
 ---
 
-## 16. Response Inspection (`ApiResponse`)
+## 16. Mobile Center (Dynamic Offers & Data Bundles) DTOs
+
+Used for querying customer data bundle offers, executing offer purchases, and checking asynchronous purchase status.
+
+| DTO Class | Required Parameters | Description |
+| :--- | :--- | :--- |
+| `MobileCenterFetchOffersRequest` | `msisdn` | Query available dynamic data offers for subscriber phone number. |
+| `MobileCenterPurchaseRequest` | `msisdn`, `offeringId`, `paymentMode`, `accountId`, `price`, `resourceAmount`, `validity`, `transactionId` | Fulfill data bundle / offer purchase. |
+| `MobileCenterCheckStatusRequest` | `id`, `serviceAccountId` (default 0) | Query asynchronous status of M-Pesa bundle purchase. |
+
+---
+
+## 17. Response Inspection (`ApiResponse`)
+
 
 All SDK helper methods return an instance of `Statum\Safaricom\Daraja\Http\ApiResponse`.
 

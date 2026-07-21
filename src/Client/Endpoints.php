@@ -39,4 +39,8 @@ final class Endpoints
     public const SIMPORTAL_GET_LOCATION_INFO = '/simportal/v1/getlocationinfo';
     public const SIMPORTAL_SUSPEND_UNSUSPEND = '/simportal/v1/suspend_unsuspend_sub';
     public const MOB_NUMBER_VALIDATION = '/v1/KYC-validation/validateID';
+    public const MOBILE_CENTER_FETCH_OFFERS = '/v1/dynamic-offers/fetch';
+    public const MOBILE_CENTER_PURCHASE = '/v1/dynamic-offers/facebook-bundle/purchase';
+    public const MOBILE_CENTER_CHECK_STATUS = '/v2/bundles/get/status';
 }
+

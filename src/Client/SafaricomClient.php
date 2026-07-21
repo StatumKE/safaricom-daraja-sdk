@@ -28,6 +28,9 @@ use Statum\Safaricom\Daraja\Dto\Request\GetAllMessagesRequest;
 use Statum\Safaricom\Daraja\Dto\Request\GetLocationInfoRequest;
 use Statum\Safaricom\Daraja\Dto\Request\ImsiCheckAtiRequest;
 use Statum\Safaricom\Daraja\Dto\Request\ImsiLookupRequest;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterCheckStatusRequest;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterFetchOffersRequest;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterPurchaseRequest;
 use Statum\Safaricom\Daraja\Dto\Request\MobileNumberValidationRequest;
 use Statum\Safaricom\Daraja\Dto\Request\PullQueryRequest;
 use Statum\Safaricom\Daraja\Dto\Request\PullRegisterRequest;
@@ -353,6 +356,29 @@ final class SafaricomClient
     {
         return $this->post(Endpoints::IMSI_V2_CHECK_ATI, $payload);
     }
+
+    public function mobileCenterFetchOffers(MobileCenterFetchOffersRequest|string $request): ApiResponse
+    {
+        $dto = is_string($request) ? new MobileCenterFetchOffersRequest($request) : $request;
+
+        return $this->get(Endpoints::MOBILE_CENTER_FETCH_OFFERS, [
+            'msisdn' => $dto->msisdn,
+        ]);
+    }
+
+    public function mobileCenterPurchase(MobileCenterPurchaseRequest $payload, ?string $path = null): ApiResponse
+    {
+        return $this->post($path ?? Endpoints::MOBILE_CENTER_PURCHASE, $payload);
+    }
+
+    public function mobileCenterCheckStatus(MobileCenterCheckStatusRequest $payload): ApiResponse
+    {
+        return $this->get(Endpoints::MOBILE_CENTER_CHECK_STATUS, [
+            'id' => $payload->id,
+            'serviceAccountId' => $payload->serviceAccountId,
+        ]);
+    }
+
 
     public function refreshAccessToken(): AccessToken
     {

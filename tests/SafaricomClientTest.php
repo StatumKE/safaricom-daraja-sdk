@@ -13,6 +13,9 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Statum\Safaricom\Daraja\Client\SafaricomClient;
 use Statum\Safaricom\Daraja\Config\SafaricomConfig;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterCheckStatusRequest;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterFetchOffersRequest;
+use Statum\Safaricom\Daraja\Dto\Request\MobileCenterPurchaseRequest;
 use Statum\Safaricom\Daraja\Dto\Request\StkPushRequest;
 use Statum\Safaricom\Daraja\Environment\Environment;
 
@@ -77,4 +80,107 @@ final class SafaricomClientTest extends TestCase
         self::assertSame('174379', $body['BusinessShortCode']);
         self::assertSame('CustomerPayBillOnline', $body['TransactionType']);
     }
+
+    #[Test]
+    public function itExecutesMobileCenterFetchOffersRequest(): void
+    {
+        $history = [];
+        $stack = HandlerStack::create(new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'access_token' => 'token-123',
+                'expires_in' => 3599,
+            ], JSON_THROW_ON_ERROR)),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'status' => '200',
+                'desc' => 'Offers retrieved',
+            ], JSON_THROW_ON_ERROR)),
+        ]));
+
+        $stack->push(Middleware::history($history));
+
+        $client = SafaricomClient::create(
+            new SafaricomConfig('consumer-key', 'consumer-secret', Environment::Sandbox),
+            new Client(['base_uri' => 'https://sandbox.safaricom.co.ke', 'handler' => $stack])
+        );
+
+        $response = $client->mobileCenterFetchOffers('254708374149');
+
+        self::assertSame('200', $response->json()['status']);
+        self::assertCount(2, $history);
+
+        $req = $history[1]['request'];
+        self::assertSame('GET', $req->getMethod());
+        self::assertSame('/v1/dynamic-offers/fetch?msisdn=254708374149', $req->getRequestTarget());
+    }
+
+    #[Test]
+    public function itExecutesMobileCenterPurchaseRequest(): void
+    {
+        $history = [];
+        $stack = HandlerStack::create(new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'access_token' => 'token-123',
+                'expires_in' => 3599,
+            ], JSON_THROW_ON_ERROR)),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'header' => ['responseCode' => 200, 'customerMessage' => 'Bundle purchase was successful'],
+            ], JSON_THROW_ON_ERROR)),
+        ]));
+
+        $stack->push(Middleware::history($history));
+
+        $client = SafaricomClient::create(
+            new SafaricomConfig('consumer-key', 'consumer-secret', Environment::Sandbox),
+            new Client(['base_uri' => 'https://sandbox.safaricom.co.ke', 'handler' => $stack])
+        );
+
+        $response = $client->mobileCenterPurchase(new MobileCenterPurchaseRequest(
+            msisdn: '254708374149',
+            offeringId: '28042021',
+            paymentMode: 'airtime',
+            accountId: '2572',
+            price: '5',
+            resourceAmount: '50',
+            validity: '1',
+            transactionId: '12345'
+        ));
+
+        self::assertSame(200, $response->json()['header']['responseCode']);
+
+        $req = $history[1]['request'];
+        self::assertSame('POST', $req->getMethod());
+        self::assertSame('/v1/dynamic-offers/facebook-bundle/purchase', $req->getRequestTarget());
+    }
+
+    #[Test]
+    public function itExecutesMobileCenterCheckStatusRequest(): void
+    {
+        $history = [];
+        $stack = HandlerStack::create(new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'access_token' => 'token-123',
+                'expires_in' => 3599,
+            ], JSON_THROW_ON_ERROR)),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'responseStatus' => '1000',
+                'responseDesc' => 'Successful bundle purchase',
+            ], JSON_THROW_ON_ERROR)),
+        ]));
+
+        $stack->push(Middleware::history($history));
+
+        $client = SafaricomClient::create(
+            new SafaricomConfig('consumer-key', 'consumer-secret', Environment::Sandbox),
+            new Client(['base_uri' => 'https://sandbox.safaricom.co.ke', 'handler' => $stack])
+        );
+
+        $response = $client->mobileCenterCheckStatus(new MobileCenterCheckStatusRequest('369852017112111347306', 0));
+
+        self::assertSame('1000', $response->json()['responseStatus']);
+
+        $req = $history[1]['request'];
+        self::assertSame('GET', $req->getMethod());
+        self::assertSame('/v2/bundles/get/status?id=369852017112111347306&serviceAccountId=0', $req->getRequestTarget());
+    }
 }
+
