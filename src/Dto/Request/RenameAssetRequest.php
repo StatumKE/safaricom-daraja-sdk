@@ -20,7 +20,7 @@ final class RenameAssetRequest extends AbstractRequestDto implements RequestDtoI
         public readonly string $msisdn,
         public readonly string $vpnGroup,
         public readonly string $username,
-        public readonly string $assetName
+        public readonly string $assetName,
     ) {
         self::requireNonEmptyString($this->msisdn, 'msisdn');
         self::requireNonEmptyString($this->vpnGroup, 'vpnGroup');

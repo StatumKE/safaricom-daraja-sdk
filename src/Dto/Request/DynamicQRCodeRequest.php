@@ -24,7 +24,7 @@ final class DynamicQRCodeRequest extends AbstractRequestDto implements RequestDt
         public readonly int|string $amount,
         public readonly string $trxCode,
         public readonly string $cpi,
-        public readonly int|string $size
+        public readonly int|string $size,
     ) {
         self::requireNonEmptyString($this->merchantName, 'merchantName');
         self::requireNonEmptyString($this->refNo, 'refNo');

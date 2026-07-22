@@ -34,14 +34,14 @@ final class ReversalRequest extends AbstractRequestDto implements RequestDtoInte
         public readonly string $resultURL,
         public readonly string $queueTimeOutURL,
         public readonly string $remarks,
-        public readonly ?string $occasion = null
+        public readonly ?string $occasion = null,
     ) {
         self::requireNonEmptyString($this->initiator, 'initiator');
         self::requireNonEmptyString($this->securityCredential, 'securityCredential');
         self::requireNonEmptyString($this->commandID, 'commandID');
         self::requireNonEmptyString($this->transactionID, 'transactionID');
-        self::requireNonEmptyString($this->resultURL, 'resultURL');
-        self::requireNonEmptyString($this->queueTimeOutURL, 'queueTimeOutURL');
+        self::requireHttpsUrl($this->resultURL, 'resultURL');
+        self::requireHttpsUrl($this->queueTimeOutURL, 'queueTimeOutURL');
         self::requireNonEmptyString($this->remarks, 'remarks');
     }
 

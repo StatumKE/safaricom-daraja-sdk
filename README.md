@@ -35,7 +35,7 @@ A modern, type-safe PHP 8.2+ SDK for Safaricom Daraja integration. It provides f
 
 - **Framework-Agnostic Core**: Can be used in raw PHP scripts, Wordpress, Symfony, or Laravel.
 - **Type-Safe Request DTOs**: Strict constructors validate your payloads before making outgoing HTTP requests.
-- **Automatic OAuth Lifecycle**: Token fetching, caching, and token refresh are handled invisibly under the hood.
+- **Automatic OAuth Lifecycle**: Token fetching, expiry-buffered caching, and safe read-request token refresh are handled under the hood.
 - **Full Laravel Binding**: Auto-discovered ServiceProvider binds `SafaricomClient` singleton with optional config publishing.
 - **Comprehensive API Coverage**: Payments (STK, C2B v2, B2B, B2C v3, B2Pochi, Reversals, Dynamic QR, Bill Manager, Lipa na Bonga), Mobile Center (Dynamic Offers & Data Bundles), standing orders, SIM query, and KYC lookups.
 
@@ -90,6 +90,29 @@ $config = new SafaricomConfig(
 
 $client = SafaricomClient::create($config);
 ```
+
+For multi-process deployments, inject a PSR-16-backed token store so PHP-FPM workers and queue workers can share the OAuth token. The default store is process-local:
+
+```php
+use GuzzleHttp\Client;
+use Psr\SimpleCache\CacheInterface;
+use Statum\Safaricom\Daraja\Http\Psr16AccessTokenStore;
+
+/** @var CacheInterface $cache */
+$httpClient = new Client([
+    'base_uri' => $config->environment->baseUri(),
+    'timeout' => $config->timeout,
+    'connect_timeout' => $config->connectTimeout,
+]);
+
+$client = new SafaricomClient(
+    httpClient: $httpClient,
+    config: $config,
+    accessTokenStore: new Psr16AccessTokenStore($cache),
+);
+```
+
+The cache implementation should provide an atomic lock around cache misses in high-concurrency deployments. Never cache consumer secrets, passkeys, initiator passwords, or security credentials.
 
 ### 2. Laravel Setup
 
@@ -265,9 +288,11 @@ try {
 } catch (ApiException $e) {
     // Safaricom API returned HTTP errors (4xx/5xx)
     $apiResponse = $e->response();
-    echo "API HTTP " . $apiResponse->statusCode() . ": " . $apiResponse->body();
+    echo "API HTTP " . ($apiResponse?->statusCode() ?? 0);
 }
 ```
+
+Do not log access tokens, consumer secrets, security credentials, or raw API bodies. Inspect and redact `$e->response()->body()` only in controlled diagnostic code.
 
 ---
 
@@ -288,6 +313,8 @@ When testing against Safaricom's Sandbox environment, pay attention to these lim
 2. **Till Simulation limitations**: Not all sandbox apps support `CustomerBuyGoodsOnline` simulations. When simulating, ensure your `billRefNumber` is set to `null` to prevent validation mapper errors.
 3. **Network & IMSI lookups**: Sandbox lookups are not mapped to live network carriers and typically return `410 Backend System Unavailable` or `404 Not Found`.
 
+All callback, result, confirmation, validation, and timeout URLs must be valid HTTPS URLs and must not contain embedded URL credentials. Use a public HTTPS endpoint for Safaricom callbacks.
+
 ---
 
 ## Running Tests
@@ -297,6 +324,9 @@ Verify local SDK behaviors by executing PHPUnit tests:
 ```bash
 composer install
 composer test
+composer analyse
+composer style
+composer security-audit
 ```
 
 ---

@@ -14,7 +14,7 @@ use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
 final class BillManagerCancelSingleInvoiceRequest extends AbstractRequestDto implements RequestDtoInterface
 {
     public function __construct(
-        public readonly string $externalReference
+        public readonly string $externalReference,
     ) {
         self::requireNonEmptyString($this->externalReference, 'externalReference');
     }

@@ -14,12 +14,12 @@ abstract class AbstractBillManagerOptInRequest extends AbstractRequestDto implem
         public readonly string $officialContact,
         public readonly int|string $sendReminders,
         public readonly string $callbackUrl,
-        public readonly ?string $logo = null
+        public readonly ?string $logo = null,
     ) {
         self::requireNonEmptyString($this->shortcode, 'shortcode');
         self::requireNonEmptyString($this->email, 'email');
         self::requireNonEmptyString($this->officialContact, 'officialContact');
-        self::requireNonEmptyString($this->callbackUrl, 'callbackUrl');
+        self::requireHttpsUrl($this->callbackUrl, 'callbackUrl');
 
         if ($this->logo !== null) {
             self::requireNonEmptyString($this->logo, 'logo');

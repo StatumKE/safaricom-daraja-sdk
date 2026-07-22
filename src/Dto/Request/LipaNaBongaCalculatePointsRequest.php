@@ -14,9 +14,8 @@ use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
 final class LipaNaBongaCalculatePointsRequest extends AbstractRequestDto implements RequestDtoInterface
 {
     public function __construct(
-        public readonly int|string $points
-    ) {
-    }
+        public readonly int|string $points,
+    ) {}
 
     public function toArray(): array
     {

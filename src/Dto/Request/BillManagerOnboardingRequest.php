@@ -22,7 +22,7 @@ final class BillManagerOnboardingRequest extends AbstractBillManagerOptInRequest
         string $officialContact,
         int|string $sendReminders,
         string $callbackUrl,
-        ?string $logo = null
+        ?string $logo = null,
     ) {
         parent::__construct($shortcode, $email, $officialContact, $sendReminders, $callbackUrl, $logo);
     }

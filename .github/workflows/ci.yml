@@ -37,3 +37,9 @@ jobs:
 
       - name: Run static analysis
         run: composer analyse
+
+      - name: Run coding-standard check
+        run: composer style
+
+      - name: Run dependency audit
+        run: composer audit --no-interaction

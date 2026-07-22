@@ -12,14 +12,14 @@ final readonly class AccessToken
     public function __construct(
         public string $value,
         public int $expiresIn,
-        public DateTimeImmutable $expiresAt
+        public DateTimeImmutable $expiresAt,
     ) {
         if ($this->value === '') {
             throw new ConfigurationException('Access token cannot be empty.');
         }
 
-        if ($this->expiresIn < 0) {
-            throw new ConfigurationException('Access token expiry must be zero or greater.');
+        if ($this->expiresIn < 1) {
+            throw new ConfigurationException('Access token expiry must be greater than zero.');
         }
     }
 

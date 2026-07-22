@@ -22,7 +22,7 @@ final class BillManagerChangeOptInDetailsRequest extends AbstractBillManagerOptI
         string $officialContact,
         int|string $sendReminders,
         string $callbackUrl,
-        string $logo
+        string $logo,
     ) {
         parent::__construct($shortcode, $email, $officialContact, $sendReminders, $callbackUrl, $logo);
     }

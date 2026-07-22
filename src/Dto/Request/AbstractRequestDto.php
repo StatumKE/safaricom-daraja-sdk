@@ -17,6 +17,22 @@ abstract class AbstractRequestDto
         return $value;
     }
 
+    protected static function requireHttpsUrl(string $value, string $field): string
+    {
+        self::requireNonEmptyString($value, $field);
+
+        $parts = parse_url($value);
+        if ($parts === false || ($parts['scheme'] ?? null) !== 'https' || ($parts['host'] ?? null) === null) {
+            throw new ConfigurationException(sprintf('%s must be a valid HTTPS URL.', $field));
+        }
+
+        if (isset($parts['user']) || isset($parts['pass'])) {
+            throw new ConfigurationException(sprintf('%s must not contain URL credentials.', $field));
+        }
+
+        return $value;
+    }
+
     protected static function requireNonNegativeInt(int $value, string $field): int
     {
         if ($value < 0) {
@@ -64,7 +80,7 @@ abstract class AbstractRequestDto
             throw new ConfigurationException(sprintf(
                 '%s must be one of: %s.',
                 $field,
-                implode(', ', $allowed)
+                implode(', ', $allowed),
             ));
         }
 
@@ -79,7 +95,7 @@ abstract class AbstractRequestDto
     {
         return array_filter(
             $payload,
-            static fn (mixed $value): bool => $value !== null
+            static fn(mixed $value): bool => $value !== null,
         );
     }
 }

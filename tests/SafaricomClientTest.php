@@ -14,13 +14,67 @@ use PHPUnit\Framework\TestCase;
 use Statum\Safaricom\Daraja\Client\SafaricomClient;
 use Statum\Safaricom\Daraja\Config\SafaricomConfig;
 use Statum\Safaricom\Daraja\Dto\Request\MobileCenterCheckStatusRequest;
-use Statum\Safaricom\Daraja\Dto\Request\MobileCenterFetchOffersRequest;
 use Statum\Safaricom\Daraja\Dto\Request\MobileCenterPurchaseRequest;
 use Statum\Safaricom\Daraja\Dto\Request\StkPushRequest;
 use Statum\Safaricom\Daraja\Environment\Environment;
+use Statum\Safaricom\Daraja\Exception\ApiException;
 
 final class SafaricomClientTest extends TestCase
 {
+    #[Test]
+    public function itRejectsMalformedOAuthExpiryValues(): void
+    {
+        $client = SafaricomClient::create(
+            new SafaricomConfig('consumer-key', 'consumer-secret', Environment::Sandbox),
+            new Client(['handler' => HandlerStack::create(new MockHandler([
+                new Response(200, ['Content-Type' => 'application/json'], '{"access_token":"token","expires_in":"invalid"}'),
+            ]))]),
+        );
+
+        $this->expectException(ApiException::class);
+        $client->accessToken();
+    }
+
+    #[Test]
+    public function itRefreshesOnceForUnauthorizedReadRequests(): void
+    {
+        $history = [];
+        $stack = HandlerStack::create(new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], '{"access_token":"old-token","expires_in":3600}'),
+            new Response(401, ['Content-Type' => 'application/json'], '{"error":"invalid_token"}'),
+            new Response(200, ['Content-Type' => 'application/json'], '{"access_token":"new-token","expires_in":3600}'),
+            new Response(200, ['Content-Type' => 'application/json'], '{"status":"ok"}'),
+        ]));
+        $stack->push(Middleware::history($history));
+
+        $client = SafaricomClient::create(
+            new SafaricomConfig('consumer-key', 'consumer-secret', Environment::Sandbox),
+            new Client(['base_uri' => 'https://sandbox.safaricom.co.ke', 'handler' => $stack]),
+        );
+
+        self::assertSame(['status' => 'ok'], $client->get('/v1/status')->json());
+        self::assertCount(4, $history);
+        self::assertSame('Bearer old-token', $history[1]['request']->getHeaderLine('Authorization'));
+        self::assertSame('Bearer new-token', $history[3]['request']->getHeaderLine('Authorization'));
+    }
+
+    #[Test]
+    public function itDoesNotRetryUnauthorizedPaymentRequests(): void
+    {
+        $stack = HandlerStack::create(new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], '{"access_token":"token","expires_in":3600}'),
+            new Response(401, ['Content-Type' => 'application/json'], '{"error":"invalid_token"}'),
+        ]));
+
+        $client = SafaricomClient::create(
+            new SafaricomConfig('consumer-key', 'consumer-secret', Environment::Sandbox),
+            new Client(['base_uri' => 'https://sandbox.safaricom.co.ke', 'handler' => $stack]),
+        );
+
+        $this->expectException(ApiException::class);
+        $client->post('/v1/payment');
+    }
+
     #[Test]
     public function itFetchesAnAccessTokenAndSendsBearerRequests(): void
     {
@@ -46,7 +100,7 @@ final class SafaricomClientTest extends TestCase
 
         $client = SafaricomClient::create(
             new SafaricomConfig('consumer-key', 'consumer-secret', Environment::Sandbox),
-            $httpClient
+            $httpClient,
         );
 
         $response = $client->stkPush(new StkPushRequest(
@@ -100,7 +154,7 @@ final class SafaricomClientTest extends TestCase
 
         $client = SafaricomClient::create(
             new SafaricomConfig('consumer-key', 'consumer-secret', Environment::Sandbox),
-            new Client(['base_uri' => 'https://sandbox.safaricom.co.ke', 'handler' => $stack])
+            new Client(['base_uri' => 'https://sandbox.safaricom.co.ke', 'handler' => $stack]),
         );
 
         $response = $client->mobileCenterFetchOffers('254708374149');
@@ -131,7 +185,7 @@ final class SafaricomClientTest extends TestCase
 
         $client = SafaricomClient::create(
             new SafaricomConfig('consumer-key', 'consumer-secret', Environment::Sandbox),
-            new Client(['base_uri' => 'https://sandbox.safaricom.co.ke', 'handler' => $stack])
+            new Client(['base_uri' => 'https://sandbox.safaricom.co.ke', 'handler' => $stack]),
         );
 
         $response = $client->mobileCenterPurchase(new MobileCenterPurchaseRequest(
@@ -142,7 +196,7 @@ final class SafaricomClientTest extends TestCase
             price: '5',
             resourceAmount: '50',
             validity: '1',
-            transactionId: '12345'
+            transactionId: '12345',
         ));
 
         self::assertSame(200, $response->json()['header']['responseCode']);
@@ -171,7 +225,7 @@ final class SafaricomClientTest extends TestCase
 
         $client = SafaricomClient::create(
             new SafaricomConfig('consumer-key', 'consumer-secret', Environment::Sandbox),
-            new Client(['base_uri' => 'https://sandbox.safaricom.co.ke', 'handler' => $stack])
+            new Client(['base_uri' => 'https://sandbox.safaricom.co.ke', 'handler' => $stack]),
         );
 
         $response = $client->mobileCenterCheckStatus(new MobileCenterCheckStatusRequest('369852017112111347306', 0));

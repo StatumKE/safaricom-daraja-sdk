@@ -23,7 +23,7 @@ final class AllSimsRequest extends AbstractRequestDto implements RequestDtoInter
         public readonly array $vpnGroup,
         public readonly string $startAtIndex,
         public readonly string $pageSize,
-        public readonly string $username
+        public readonly string $username,
     ) {
         if ($this->vpnGroup === []) {
             throw new \Statum\Safaricom\Daraja\Exception\ConfigurationException('vpnGroup cannot be empty.');

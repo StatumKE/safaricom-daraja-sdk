@@ -28,7 +28,7 @@ final class BillManagerReconciliationRequest extends AbstractRequestDto implemen
         public readonly string $phoneNumber,
         public readonly string $fullName,
         public readonly string $invoiceName,
-        public readonly string $externalReference
+        public readonly string $externalReference,
     ) {
         self::requireNonEmptyString($this->paymentDate, 'paymentDate');
         self::requireNonEmptyString($this->accountReference, 'accountReference');

@@ -7,6 +7,7 @@ namespace Statum\Safaricom\Daraja\Laravel;
 use Illuminate\Support\ServiceProvider;
 use Statum\Safaricom\Daraja\Client\SafaricomClient;
 use Statum\Safaricom\Daraja\Config\SafaricomConfig;
+use Statum\Safaricom\Daraja\Contract\AccessTokenStoreInterface;
 use Statum\Safaricom\Daraja\Environment\Environment;
 
 final class SafaricomServiceProvider extends ServiceProvider
@@ -30,14 +31,19 @@ final class SafaricomServiceProvider extends ServiceProvider
             $environment = Environment::tryFrom((string) ($config['environment'] ?? Environment::Sandbox->value))
                 ?? Environment::Sandbox;
 
+            $accessTokenStore = null;
+            if ($app->bound('cache.store')) {
+                $accessTokenStore = new LaravelAccessTokenStore($app->make('cache.store'));
+            }
+
             return SafaricomClient::create(new SafaricomConfig(
                 consumerKey: (string) ($config['consumer_key'] ?? ''),
                 consumerSecret: (string) ($config['consumer_secret'] ?? ''),
                 environment: $environment,
                 timeout: (int) ($config['timeout'] ?? 30),
                 connectTimeout: (int) ($config['connect_timeout'] ?? 10),
-                defaultHeaders: $defaultHeaders
-            ));
+                defaultHeaders: $defaultHeaders,
+            ), accessTokenStore: $accessTokenStore instanceof AccessTokenStoreInterface ? $accessTokenStore : null);
         });
     }
 

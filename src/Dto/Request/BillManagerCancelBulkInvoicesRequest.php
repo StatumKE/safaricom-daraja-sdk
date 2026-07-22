@@ -18,7 +18,7 @@ final class BillManagerCancelBulkInvoicesRequest extends AbstractRequestDto impl
      * @param array<int, BillManagerCancelSingleInvoiceRequest> $invoices
      */
     public function __construct(
-        public readonly array $invoices
+        public readonly array $invoices,
     ) {
         if ($this->invoices === []) {
             throw new ConfigurationException('invoices cannot be empty.');
@@ -34,8 +34,8 @@ final class BillManagerCancelBulkInvoicesRequest extends AbstractRequestDto impl
     public function toArray(): array
     {
         return array_map(
-            static fn (BillManagerCancelSingleInvoiceRequest $invoice): array => $invoice->toArray(),
-            $this->invoices
+            static fn(BillManagerCancelSingleInvoiceRequest $invoice): array => $invoice->toArray(),
+            $this->invoices,
         );
     }
 }

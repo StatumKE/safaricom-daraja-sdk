@@ -14,7 +14,7 @@ use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
 final class DeleteMessageRequest extends AbstractRequestDto implements RequestDtoInterface
 {
     public function __construct(
-        public readonly int $id
+        public readonly int $id,
     ) {
         self::requireNonNegativeInt($this->id, 'id');
     }

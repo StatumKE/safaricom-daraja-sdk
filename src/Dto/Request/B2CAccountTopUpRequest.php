@@ -38,7 +38,7 @@ final class B2CAccountTopUpRequest extends AbstractRequestDto implements Request
         public readonly string $requester,
         public readonly string $remarks,
         public readonly string $queueTimeOutURL,
-        public readonly string $resultURL
+        public readonly string $resultURL,
     ) {
         self::requireNonEmptyString($this->initiator, 'initiator');
         self::requireNonEmptyString($this->securityCredential, 'securityCredential');
@@ -46,8 +46,8 @@ final class B2CAccountTopUpRequest extends AbstractRequestDto implements Request
         self::requireNonEmptyString($this->accountReference, 'accountReference');
         self::requireNonEmptyString($this->requester, 'requester');
         self::requireNonEmptyString($this->remarks, 'remarks');
-        self::requireNonEmptyString($this->queueTimeOutURL, 'queueTimeOutURL');
-        self::requireNonEmptyString($this->resultURL, 'resultURL');
+        self::requireHttpsUrl($this->queueTimeOutURL, 'queueTimeOutURL');
+        self::requireHttpsUrl($this->resultURL, 'resultURL');
     }
 
     public function toArray(): array

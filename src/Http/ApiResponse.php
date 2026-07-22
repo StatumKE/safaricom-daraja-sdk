@@ -15,9 +15,8 @@ final readonly class ApiResponse
      */
     private function __construct(
         private ResponseInterface $response,
-        private ?array $json
-    ) {
-    }
+        private ?array $json,
+    ) {}
 
     public static function fromResponse(ResponseInterface $response): self
     {

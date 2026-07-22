@@ -14,7 +14,7 @@ use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
 final class DeleteMessageThreadRequest extends AbstractRequestDto implements RequestDtoInterface
 {
     public function __construct(
-        public readonly string $msisdn
+        public readonly string $msisdn,
     ) {
         self::requireNonEmptyString($this->msisdn, 'msisdn');
     }

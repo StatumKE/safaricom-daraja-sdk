@@ -22,7 +22,7 @@ final class MobileNumberValidationRequest extends AbstractRequestDto implements 
         public readonly string $shortCode,
         public readonly string $msisdn,
         public readonly string $idType,
-        public readonly string $idNumber
+        public readonly string $idNumber,
     ) {
         self::requireNonEmptyString($this->requestRefID, 'requestRefID');
         self::requireNonEmptyString($this->shortCode, 'shortCode');

@@ -18,7 +18,7 @@ final class BillManagerBulkInvoiceRequest extends AbstractRequestDto implements 
      * @param array<int, BillManagerSingleInvoiceRequest> $invoices
      */
     public function __construct(
-        public readonly array $invoices
+        public readonly array $invoices,
     ) {
         if ($this->invoices === []) {
             throw new ConfigurationException('invoices cannot be empty.');
@@ -34,8 +34,8 @@ final class BillManagerBulkInvoiceRequest extends AbstractRequestDto implements 
     public function toArray(): array
     {
         return array_map(
-            static fn (BillManagerSingleInvoiceRequest $invoice): array => $invoice->toArray(),
-            $this->invoices
+            static fn(BillManagerSingleInvoiceRequest $invoice): array => $invoice->toArray(),
+            $this->invoices,
         );
     }
 }

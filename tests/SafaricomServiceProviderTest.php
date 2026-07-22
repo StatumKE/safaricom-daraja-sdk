@@ -100,6 +100,14 @@ final class SafaricomServiceProviderTest extends TestCase
         }
     }
 
+    #[Test]
+    public function itRejectsNonPositiveTimeouts(): void
+    {
+        $this->expectException(\Statum\Safaricom\Daraja\Exception\ConfigurationException::class);
+
+        new SafaricomConfig('key', 'secret', Environment::Sandbox, 0, 10);
+    }
+
     private function readPrivateProperty(object $object, string $property): mixed
     {
         $reflectionProperty = new ReflectionProperty($object, $property);
@@ -140,9 +148,8 @@ final class SafaricomServiceProviderTest extends TestCase
 final class TestApplication extends Container
 {
     public function __construct(
-        private readonly bool $runningInConsole
-    ) {
-    }
+        private readonly bool $runningInConsole,
+    ) {}
 
     public function runningInConsole(): bool
     {
@@ -155,9 +162,7 @@ final class ArrayConfigRepository
     /**
      * @param array<string, mixed> $values
      */
-    public function __construct(private array $values)
-    {
-    }
+    public function __construct(private array $values) {}
 
     public function get(string $key, mixed $default = null): mixed
     {

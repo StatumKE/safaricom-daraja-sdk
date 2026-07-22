@@ -34,7 +34,7 @@ final class StkPushRequest extends AbstractRequestDto implements RequestDtoInter
         public readonly int|string $phoneNumber,
         public readonly string $callBackURL,
         public readonly string $accountReference,
-        public readonly string $transactionDesc
+        public readonly string $transactionDesc,
     ) {
         self::requireNonEmptyString($this->businessShortCode, 'businessShortCode');
         self::requireNonEmptyString($this->password, 'password');
@@ -52,7 +52,7 @@ final class StkPushRequest extends AbstractRequestDto implements RequestDtoInter
         self::requireShortCode($this->partyB, 'partyB');
         self::requireMsisdn($this->partyA, 'partyA');
         self::requireMsisdn($this->phoneNumber, 'phoneNumber');
-        self::requireNonEmptyString($this->callBackURL, 'callBackURL');
+        self::requireHttpsUrl($this->callBackURL, 'callBackURL');
         self::requireNonEmptyString($this->accountReference, 'accountReference');
         self::requireNonEmptyString($this->transactionDesc, 'transactionDesc');
 

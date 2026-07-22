@@ -22,7 +22,7 @@ final class C2bSimulateRequest extends AbstractRequestDto implements RequestDtoI
         public readonly string $commandID,
         public readonly int|string $amount,
         public readonly int|string $msisdn,
-        public readonly ?string $billRefNumber = null
+        public readonly ?string $billRefNumber = null,
     ) {
         self::requireShortCode($this->shortCode, 'shortCode');
         self::requireOneOf($this->commandID, 'commandID', [

@@ -14,7 +14,7 @@ use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
 final class SearchMessagesRequest extends AbstractRequestDto implements RequestDtoInterface
 {
     public function __construct(
-        public readonly string $searchValue
+        public readonly string $searchValue,
     ) {
         self::requireNonEmptyString($this->searchValue, 'searchValue');
     }

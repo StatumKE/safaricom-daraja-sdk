@@ -38,13 +38,13 @@ final class StandingOrderExternalRequest extends AbstractRequestDto implements R
         public readonly string $frequency,
         public readonly string $startDate,
         public readonly string $endDate,
-        public readonly string $customStoId = ''
+        public readonly string $customStoId = '',
     ) {
         self::requireNonEmptyString($this->standingOrderName, 'standingOrderName');
         self::requireNonEmptyString($this->businessShortCode, 'businessShortCode');
         self::requireNonEmptyString($this->transactionType, 'transactionType');
         self::requireNonEmptyString($this->receiverPartyIdentifierType, 'receiverPartyIdentifierType');
-        self::requireNonEmptyString($this->callBackURL, 'callBackURL');
+        self::requireHttpsUrl($this->callBackURL, 'callBackURL');
         self::requireNonEmptyString($this->accountReference, 'accountReference');
         self::requireNonEmptyString($this->transactionDesc, 'transactionDesc');
         self::requireNonEmptyString($this->frequency, 'frequency');

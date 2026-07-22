@@ -9,6 +9,4 @@ namespace Statum\Safaricom\Daraja\Dto\Request;
  *
  * @property-read string $customerNumber
  */
-final class SwapCheckAtiRequest extends AbstractCustomerNumberRequest
-{
-}
+final class SwapCheckAtiRequest extends AbstractCustomerNumberRequest {}

@@ -41,6 +41,31 @@ $response = $client->stkPush(new StkPushRequest(
 var_dump($response->json());
 ```
 
+### Shared OAuth Token Cache
+
+The default token store is process-local. For PHP-FPM, queue workers, or multiple application instances, inject a PSR-16 implementation backed by Redis or another shared cache. Laravel installations automatically use the Laravel cache store when it is available:
+
+```php
+use GuzzleHttp\Client;
+use Psr\SimpleCache\CacheInterface;
+use Statum\Safaricom\Daraja\Http\Psr16AccessTokenStore;
+
+/** @var CacheInterface $cache */
+$httpClient = new Client([
+    'base_uri' => $config->environment->baseUri(),
+    'timeout' => $config->timeout,
+    'connect_timeout' => $config->connectTimeout,
+]);
+
+$client = new SafaricomClient(
+    httpClient: $httpClient,
+    config: $config,
+    accessTokenStore: new Psr16AccessTokenStore($cache),
+);
+```
+
+Configure an atomic lock around cache misses in the application cache layer to avoid concurrent token requests. The SDK retries authentication once only for read requests after a 401 response; payment and other POST requests are never automatically retried.
+
 ## STK Password
 
 The STK passkey is not part of `SafaricomConfig`. It is a flow-specific secret used only to derive the STK password, so keep it in your app config or secrets manager and pass it to the generator when needed.

@@ -28,7 +28,7 @@ final class MobileCenterPurchaseRequest extends AbstractRequestDto implements Re
         public readonly string $price,
         public readonly string $resourceAmount,
         public readonly string $validity,
-        public readonly string $transactionId
+        public readonly string $transactionId,
     ) {
         self::requireNonEmptyString($this->msisdn, 'msisdn');
         self::requireNonEmptyString($this->offeringId, 'offeringId');

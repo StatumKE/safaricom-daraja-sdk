@@ -9,17 +9,18 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
 use Statum\Safaricom\Daraja\Config\SafaricomConfig;
+use Statum\Safaricom\Daraja\Contract\AccessTokenStoreInterface;
+use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
 use Statum\Safaricom\Daraja\Dto\Request\AccountBalanceRequest;
 use Statum\Safaricom\Daraja\Dto\Request\AgeOnNetworkRequest;
 use Statum\Safaricom\Daraja\Dto\Request\AllSimsRequest;
-use Statum\Safaricom\Daraja\Dto\Request\B2PochiPaymentRequest;
 use Statum\Safaricom\Daraja\Dto\Request\B2BExpressCheckoutRequest;
 use Statum\Safaricom\Daraja\Dto\Request\B2bHakikishaRequest;
 use Statum\Safaricom\Daraja\Dto\Request\B2bPaymentRequest;
 use Statum\Safaricom\Daraja\Dto\Request\B2CAccountTopUpRequest;
 use Statum\Safaricom\Daraja\Dto\Request\B2cPaymentRequest;
+use Statum\Safaricom\Daraja\Dto\Request\B2PochiPaymentRequest;
 use Statum\Safaricom\Daraja\Dto\Request\BillManagerBulkInvoiceRequest;
 use Statum\Safaricom\Daraja\Dto\Request\BillManagerCancelBulkInvoicesRequest;
 use Statum\Safaricom\Daraja\Dto\Request\BillManagerCancelSingleInvoiceRequest;
@@ -36,10 +37,10 @@ use Statum\Safaricom\Daraja\Dto\Request\FilterMessagesRequest;
 use Statum\Safaricom\Daraja\Dto\Request\GetActivationTrendsRequest;
 use Statum\Safaricom\Daraja\Dto\Request\GetAllMessagesRequest;
 use Statum\Safaricom\Daraja\Dto\Request\GetLocationInfoRequest;
-use Statum\Safaricom\Daraja\Dto\Request\LipaNaBongaCalculatePointsRequest;
-use Statum\Safaricom\Daraja\Dto\Request\LipaNaBongaRedeemPaybillRequest;
 use Statum\Safaricom\Daraja\Dto\Request\ImsiCheckAtiRequest;
 use Statum\Safaricom\Daraja\Dto\Request\ImsiLookupRequest;
+use Statum\Safaricom\Daraja\Dto\Request\LipaNaBongaCalculatePointsRequest;
+use Statum\Safaricom\Daraja\Dto\Request\LipaNaBongaRedeemPaybillRequest;
 use Statum\Safaricom\Daraja\Dto\Request\MobileCenterCheckStatusRequest;
 use Statum\Safaricom\Daraja\Dto\Request\MobileCenterFetchOffersRequest;
 use Statum\Safaricom\Daraja\Dto\Request\MobileCenterPurchaseRequest;
@@ -52,63 +53,89 @@ use Statum\Safaricom\Daraja\Dto\Request\RenameAssetRequest;
 use Statum\Safaricom\Daraja\Dto\Request\ReversalRequest;
 use Statum\Safaricom\Daraja\Dto\Request\SearchMessagesRequest;
 use Statum\Safaricom\Daraja\Dto\Request\SendSingleMessageRequest;
-use Statum\Safaricom\Daraja\Dto\Request\TaxRemittanceRequest;
 use Statum\Safaricom\Daraja\Dto\Request\SimActivationRequest;
 use Statum\Safaricom\Daraja\Dto\Request\StandingOrderExternalRequest;
 use Statum\Safaricom\Daraja\Dto\Request\StkPushQueryRequest;
 use Statum\Safaricom\Daraja\Dto\Request\StkPushRequest;
 use Statum\Safaricom\Daraja\Dto\Request\SuspendUnsuspendSubRequest;
 use Statum\Safaricom\Daraja\Dto\Request\SwapCheckAtiRequest;
+use Statum\Safaricom\Daraja\Dto\Request\TaxRemittanceRequest;
 use Statum\Safaricom\Daraja\Dto\Request\TransactionStatusQueryRequest;
 use Statum\Safaricom\Daraja\Exception\ApiException;
 use Statum\Safaricom\Daraja\Exception\TransportException;
 use Statum\Safaricom\Daraja\Http\AccessToken;
 use Statum\Safaricom\Daraja\Http\ApiResponse;
+use Statum\Safaricom\Daraja\Http\InMemoryAccessTokenStore;
 
 final class SafaricomClient
 {
     private ?AccessToken $accessToken = null;
+    private readonly AccessTokenStoreInterface $accessTokenStore;
 
     public function __construct(
         private readonly ClientInterface $httpClient,
-        private readonly SafaricomConfig $config
+        private readonly SafaricomConfig $config,
+        ?AccessTokenStoreInterface $accessTokenStore = null,
     ) {
+        $this->accessTokenStore = $accessTokenStore ?? new InMemoryAccessTokenStore();
     }
 
-    public static function create(SafaricomConfig $config, ?ClientInterface $httpClient = null): self
-    {
+    public static function create(
+        SafaricomConfig $config,
+        ?ClientInterface $httpClient = null,
+        ?AccessTokenStoreInterface $accessTokenStore = null,
+    ): self {
         $httpClient ??= new Client([
             'base_uri' => $config->environment->baseUri(),
             'timeout' => $config->timeout,
             'connect_timeout' => $config->connectTimeout,
         ]);
 
-        return new self($httpClient, $config);
+        return new self($httpClient, $config, $accessTokenStore);
     }
 
     public function accessToken(bool $forceRefresh = false): AccessToken
     {
+        $cacheKey = $this->accessTokenCacheKey();
+
+        if (!$forceRefresh) {
+            $cachedToken = $this->accessTokenStore->get($cacheKey);
+
+            if ($cachedToken !== null && !$cachedToken->isExpired()) {
+                $this->accessToken = $cachedToken;
+
+                return $cachedToken;
+            }
+        }
+
         if ($forceRefresh || $this->accessToken === null || $this->accessToken->isExpired()) {
             $response = $this->request(
                 'GET',
                 Endpoints::OAUTH_TOKEN,
                 query: ['grant_type' => 'client_credentials'],
                 bearer: false,
-                auth: [$this->config->consumerKey, $this->config->consumerSecret]
+                auth: [$this->config->consumerKey, $this->config->consumerSecret],
             );
 
             $data = $response->json();
 
-            if (!isset($data['access_token'], $data['expires_in'])) {
+            if (!is_string($data['access_token'] ?? null) || $data['access_token'] === '') {
                 throw ApiException::invalidResponse('OAuth response did not contain access_token and expires_in.', $response);
             }
 
-            $expiresIn = (int) $data['expires_in'];
+            $expiresInValue = $data['expires_in'] ?? null;
+            if ((is_int($expiresInValue) && $expiresInValue > 0) === false
+                && (is_string($expiresInValue) && ctype_digit($expiresInValue) && (int) $expiresInValue > 0) === false) {
+                throw ApiException::invalidResponse('OAuth response did not contain a valid expires_in value.', $response);
+            }
+
+            $expiresIn = (int) $expiresInValue;
             $this->accessToken = new AccessToken(
-                (string) $data['access_token'],
+                $data['access_token'],
                 $expiresIn,
-                new DateTimeImmutable(sprintf('+%d seconds', $expiresIn))
+                new DateTimeImmutable(sprintf('+%d seconds', $expiresIn)),
             );
+            $this->accessTokenStore->put($cacheKey, $this->accessToken, max(1, $expiresIn - 60));
         }
 
         return $this->accessToken;
@@ -127,12 +154,13 @@ final class SafaricomClient
         array $query = [],
         array $headers = [],
         bool $bearer = true,
-        ?array $auth = null
+        ?array $auth = null,
+        bool $retryOnUnauthorized = false,
     ): ApiResponse {
         $requestHeaders = array_merge(
             ['Accept' => 'application/json'],
             $this->config->defaultHeaders,
-            $headers
+            $headers,
         );
 
         if ($bearer) {
@@ -164,13 +192,20 @@ final class SafaricomClient
             throw new TransportException(
                 sprintf('Failed to send %s request to "%s".', strtoupper($method), $path),
                 0,
-                $exception
+                $exception,
             );
         }
 
         $apiResponse = ApiResponse::fromResponse($response);
 
         if ($apiResponse->statusCode() >= 400) {
+            if ($retryOnUnauthorized && $bearer && $apiResponse->statusCode() === 401) {
+                $this->accessTokenStore->forget($this->accessTokenCacheKey());
+                $this->accessToken = null;
+
+                return $this->request($method, $path, $payload, $query, $headers, $bearer, $auth, false);
+            }
+
             throw ApiException::httpError($apiResponse);
         }
 
@@ -183,7 +218,7 @@ final class SafaricomClient
      */
     public function get(string $path, array $query = [], array $headers = [], bool $bearer = true): ApiResponse
     {
-        return $this->request('GET', $path, [], $query, $headers, $bearer);
+        return $this->request('GET', $path, [], $query, $headers, $bearer, null, true);
     }
 
     /**
@@ -288,6 +323,8 @@ final class SafaricomClient
 
     public function searchMessages(SearchMessagesRequest $payload, int $pageNo = 1, int $pageSize = 5): ApiResponse
     {
+        $this->validatePagination($pageNo, $pageSize);
+
         return $this->post(Endpoints::SIMPORTAL_SEARCH_MESSAGES, $payload, [
             'pageNo' => $pageNo,
             'pageSize' => $pageSize,
@@ -296,6 +333,8 @@ final class SafaricomClient
 
     public function filterMessages(FilterMessagesRequest $payload, int $pageNo = 1, int $pageSize = 10): ApiResponse
     {
+        $this->validatePagination($pageNo, $pageSize);
+
         return $this->post(Endpoints::SIMPORTAL_FILTER_MESSAGES, $payload, [
             'pageNo' => $pageNo,
             'pageSize' => $pageSize,
@@ -309,6 +348,8 @@ final class SafaricomClient
 
     public function getAllMessages(GetAllMessagesRequest $payload, int $pageNo = 1, int $pageSize = 10): ApiResponse
     {
+        $this->validatePagination($pageNo, $pageSize);
+
         return $this->post(Endpoints::SIMPORTAL_GET_ALL_MESSAGES, $payload, [
             'pageNo' => $pageNo,
             'pageSize' => $pageSize,
@@ -468,6 +509,22 @@ final class SafaricomClient
     private function buildLipaNaBongaPath(string $suffix): string
     {
         return rtrim(Endpoints::LIPA_NA_BONGA, '/') . '/' . ltrim($suffix, '/');
+    }
+
+    private function accessTokenCacheKey(): string
+    {
+        return 'safaricom-daraja:access-token:' . hash('sha256', $this->config->environment->value . ':' . $this->config->consumerKey);
+    }
+
+    private function validatePagination(int $pageNo, int $pageSize): void
+    {
+        if ($pageNo < 1) {
+            throw new \InvalidArgumentException('pageNo must be greater than zero.');
+        }
+
+        if ($pageSize < 1) {
+            throw new \InvalidArgumentException('pageSize must be greater than zero.');
+        }
     }
 
     /**

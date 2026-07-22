@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+- Hardened OAuth parsing and added expiry-buffered injectable token stores, including a PSR-16 adapter for shared caches.
+- Laravel auto-discovery now uses the configured Laravel cache store for shared OAuth tokens when one is available.
+- Added one-time 401 recovery for read-only requests while keeping payment POST requests non-retriable.
+- Added strict HTTPS callback URL validation, URL credential rejection, pagination validation, and safer API exception messages that do not include raw response bodies.
+- Added PHP-CS-Fixer, Composer security auditing, and the corresponding CI quality gates.
+- Corrected the Composer development branch alias to `1.2.x-dev` and documented shared token caching, callback security, logging redaction, and retry behavior.
 - Corrected C2B and B2C endpoint versions to match the current Daraja portal simulator contracts.
 - Corrected IMSI v2 routing, B2C `occassion` serialization, B2B Express `requestRefID`, Standing Order payload keys, and Bill Manager invoice item keys.
 - Added strict validation for STK Push and C2B simulation command, amount, MSISDN, timestamp, and documented length constraints.

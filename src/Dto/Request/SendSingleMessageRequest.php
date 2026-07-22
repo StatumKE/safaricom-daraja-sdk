@@ -18,7 +18,7 @@ final class SendSingleMessageRequest extends AbstractRequestDto implements Reque
     public function __construct(
         public readonly string $msisdn,
         public readonly string $message,
-        public readonly string $vpnGroup
+        public readonly string $vpnGroup,
     ) {
         self::requireNonEmptyString($this->msisdn, 'msisdn');
         self::requireNonEmptyString($this->message, 'message');

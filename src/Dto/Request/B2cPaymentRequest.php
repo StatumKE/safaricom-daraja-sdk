@@ -34,15 +34,15 @@ final class B2cPaymentRequest extends AbstractRequestDto implements RequestDtoIn
         public readonly string $remarks,
         public readonly string $queueTimeOutURL,
         public readonly string $resultURL,
-        public readonly ?string $occasion = null
+        public readonly ?string $occasion = null,
     ) {
         self::requireNonEmptyString($this->originatorConversationID, 'originatorConversationID');
         self::requireNonEmptyString($this->initiatorName, 'initiatorName');
         self::requireNonEmptyString($this->securityCredential, 'securityCredential');
         self::requireNonEmptyString($this->commandID, 'commandID');
         self::requireNonEmptyString($this->remarks, 'remarks');
-        self::requireNonEmptyString($this->queueTimeOutURL, 'queueTimeOutURL');
-        self::requireNonEmptyString($this->resultURL, 'resultURL');
+        self::requireHttpsUrl($this->queueTimeOutURL, 'queueTimeOutURL');
+        self::requireHttpsUrl($this->resultURL, 'resultURL');
     }
 
     public function toArray(): array

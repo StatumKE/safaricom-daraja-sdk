@@ -22,7 +22,8 @@
         "php": "^8.2",
         "ext-json": "*",
         "ext-openssl": "*",
-        "guzzlehttp/guzzle": "^7.13"
+        "guzzlehttp/guzzle": "^7.13",
+        "psr/simple-cache": "^3.0"
     },
     "suggest": {
         "illuminate/support": "Required only if you want the optional Laravel service provider and config publishing support."
@@ -32,6 +33,7 @@
         "illuminate/support": "^12.0",
         "phpoption/phpoption": "^1.5.3",
         "vlucas/phpdotenv": "^5.5",
+        "friendsofphp/php-cs-fixer": "^3.95",
         "phpstan/phpstan": "^1.12",
         "phpunit/phpunit": "^11.5"
     },
@@ -47,10 +49,14 @@
     },
     "scripts": {
         "test": "phpunit",
-        "analyse": "phpstan analyse",
+        "analyse": "phpstan analyse --memory-limit=256M",
+        "style": "php-cs-fixer check --diff",
+        "security-audit": "composer audit --no-interaction",
         "check": [
+            "@style",
             "@test",
-            "@analyse"
+            "@analyse",
+            "@security-audit"
         ]
     },
     "config": {
@@ -59,7 +65,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "1.2.x-dev"
         },
         "laravel": {
             "providers": [

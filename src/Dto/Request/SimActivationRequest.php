@@ -18,7 +18,7 @@ final class SimActivationRequest extends AbstractRequestDto implements RequestDt
     public function __construct(
         public readonly string $msisdn,
         public readonly string $vpnGroup,
-        public readonly string $username
+        public readonly string $username,
     ) {
         self::requireNonEmptyString($this->msisdn, 'msisdn');
         self::requireNonEmptyString($this->vpnGroup, 'vpnGroup');

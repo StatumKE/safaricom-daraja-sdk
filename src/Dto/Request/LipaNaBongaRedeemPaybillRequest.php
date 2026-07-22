@@ -24,7 +24,7 @@ final class LipaNaBongaRedeemPaybillRequest extends AbstractRequestDto implement
         public readonly int|string $bongaPoints,
         public readonly int|string $conversionRate,
         public readonly string $shortCode,
-        public readonly string $accountNumber
+        public readonly string $accountNumber,
     ) {
         self::requireNonEmptyString($this->msisdn, 'msisdn');
         self::requireNonEmptyString($this->shortCode, 'shortCode');

@@ -21,6 +21,10 @@ To set up a local development environment:
    ```bash
    composer test
    ```
+4. **Run the complete quality gate**:
+   ```bash
+   composer check
+   ```
 
 ---
 
@@ -51,3 +55,5 @@ Please follow this process when contributing changes:
 3. **Run Existing Tests** using PHPUnit (`composer test`) to ensure no regression.
 4. **Document Changes**: If you are adding or modifying endpoints, update `docs/api-reference.md` and `docs/endpoint-guide.md` with relevant tables and JSON payload examples.
 5. **Describe Your Changes**: Submit a PR description outlining the goal, what changed, and how it was verified.
+
+Pull requests must pass PHPUnit, PHPStan, PHP-CS-Fixer, Composer metadata validation, and the Composer dependency audit. Do not add automatic retries for payment POST requests without an idempotency and reconciliation design.

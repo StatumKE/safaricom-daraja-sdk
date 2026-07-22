@@ -16,7 +16,7 @@ final class MobileCenterCheckStatusRequest extends AbstractRequestDto implements
 {
     public function __construct(
         public readonly string $id,
-        public readonly int $serviceAccountId = 0
+        public readonly int $serviceAccountId = 0,
     ) {
         self::requireNonEmptyString($this->id, 'id');
         self::requireNonNegativeInt($this->serviceAccountId, 'serviceAccountId');

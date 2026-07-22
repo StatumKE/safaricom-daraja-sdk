@@ -20,12 +20,12 @@ final class PullRegisterRequest extends AbstractRequestDto implements RequestDto
         public readonly string $shortCode,
         public readonly string $requestType,
         public readonly string $nominatedNumber,
-        public readonly string $callBackURL
+        public readonly string $callBackURL,
     ) {
         self::requireNonEmptyString($this->shortCode, 'shortCode');
         self::requireNonEmptyString($this->requestType, 'requestType');
         self::requireNonEmptyString($this->nominatedNumber, 'nominatedNumber');
-        self::requireNonEmptyString($this->callBackURL, 'callBackURL');
+        self::requireHttpsUrl($this->callBackURL, 'callBackURL');
     }
 
     public function toArray(): array

@@ -9,13 +9,14 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
 use Statum\Safaricom\Daraja\Dto\Request\AccountBalanceRequest;
-use Statum\Safaricom\Daraja\Dto\Request\B2BExpressCheckoutRequest;
+use Statum\Safaricom\Daraja\Dto\Request\AgeOnNetworkRequest;
 use Statum\Safaricom\Daraja\Dto\Request\AllSimsRequest;
-use Statum\Safaricom\Daraja\Dto\Request\B2PochiPaymentRequest;
+use Statum\Safaricom\Daraja\Dto\Request\B2BExpressCheckoutRequest;
 use Statum\Safaricom\Daraja\Dto\Request\B2bHakikishaRequest;
 use Statum\Safaricom\Daraja\Dto\Request\B2bPaymentRequest;
 use Statum\Safaricom\Daraja\Dto\Request\B2CAccountTopUpRequest;
 use Statum\Safaricom\Daraja\Dto\Request\B2cPaymentRequest;
+use Statum\Safaricom\Daraja\Dto\Request\B2PochiPaymentRequest;
 use Statum\Safaricom\Daraja\Dto\Request\BillManagerBulkInvoiceRequest;
 use Statum\Safaricom\Daraja\Dto\Request\BillManagerCancelBulkInvoicesRequest;
 use Statum\Safaricom\Daraja\Dto\Request\BillManagerCancelSingleInvoiceRequest;
@@ -26,7 +27,6 @@ use Statum\Safaricom\Daraja\Dto\Request\BillManagerReconciliationRequest;
 use Statum\Safaricom\Daraja\Dto\Request\BillManagerSingleInvoiceRequest;
 use Statum\Safaricom\Daraja\Dto\Request\C2bRegisterUrlRequest;
 use Statum\Safaricom\Daraja\Dto\Request\C2bSimulateRequest;
-use Statum\Safaricom\Daraja\Dto\Request\AgeOnNetworkRequest;
 use Statum\Safaricom\Daraja\Dto\Request\CustomerNumberRequest;
 use Statum\Safaricom\Daraja\Dto\Request\DeleteMessageRequest;
 use Statum\Safaricom\Daraja\Dto\Request\DeleteMessageThreadRequest;
@@ -35,15 +35,14 @@ use Statum\Safaricom\Daraja\Dto\Request\FilterMessagesRequest;
 use Statum\Safaricom\Daraja\Dto\Request\GetActivationTrendsRequest;
 use Statum\Safaricom\Daraja\Dto\Request\GetAllMessagesRequest;
 use Statum\Safaricom\Daraja\Dto\Request\GetLocationInfoRequest;
-use Statum\Safaricom\Daraja\Dto\Request\LipaNaBongaCalculatePointsRequest;
-use Statum\Safaricom\Daraja\Dto\Request\LipaNaBongaRedeemPaybillRequest;
 use Statum\Safaricom\Daraja\Dto\Request\ImsiCheckAtiRequest;
 use Statum\Safaricom\Daraja\Dto\Request\ImsiLookupRequest;
+use Statum\Safaricom\Daraja\Dto\Request\LipaNaBongaCalculatePointsRequest;
+use Statum\Safaricom\Daraja\Dto\Request\LipaNaBongaRedeemPaybillRequest;
 use Statum\Safaricom\Daraja\Dto\Request\MobileCenterCheckStatusRequest;
 use Statum\Safaricom\Daraja\Dto\Request\MobileCenterFetchOffersRequest;
 use Statum\Safaricom\Daraja\Dto\Request\MobileCenterPurchaseRequest;
 use Statum\Safaricom\Daraja\Dto\Request\MobileNumberValidationRequest;
-use Statum\Safaricom\Daraja\Exception\ConfigurationException;
 use Statum\Safaricom\Daraja\Dto\Request\PullQueryRequest;
 use Statum\Safaricom\Daraja\Dto\Request\PullRegisterRequest;
 use Statum\Safaricom\Daraja\Dto\Request\QueryCustomerInfoRequest;
@@ -54,12 +53,13 @@ use Statum\Safaricom\Daraja\Dto\Request\SearchMessagesRequest;
 use Statum\Safaricom\Daraja\Dto\Request\SendSingleMessageRequest;
 use Statum\Safaricom\Daraja\Dto\Request\SimActivationRequest;
 use Statum\Safaricom\Daraja\Dto\Request\StandingOrderExternalRequest;
-use Statum\Safaricom\Daraja\Dto\Request\TaxRemittanceRequest;
 use Statum\Safaricom\Daraja\Dto\Request\StkPushQueryRequest;
 use Statum\Safaricom\Daraja\Dto\Request\StkPushRequest;
-use Statum\Safaricom\Daraja\Dto\Request\SwapCheckAtiRequest;
 use Statum\Safaricom\Daraja\Dto\Request\SuspendUnsuspendSubRequest;
+use Statum\Safaricom\Daraja\Dto\Request\SwapCheckAtiRequest;
+use Statum\Safaricom\Daraja\Dto\Request\TaxRemittanceRequest;
 use Statum\Safaricom\Daraja\Dto\Request\TransactionStatusQueryRequest;
+use Statum\Safaricom\Daraja\Exception\ConfigurationException;
 
 final class RequestDtoTest extends TestCase
 {
@@ -448,7 +448,7 @@ final class RequestDtoTest extends TestCase
                 price: '5',
                 resourceAmount: '50',
                 validity: '1',
-                transactionId: '123456789'
+                transactionId: '123456789',
             ),
             [
                 'msisdn' => '254708374149',
@@ -465,7 +465,7 @@ final class RequestDtoTest extends TestCase
         yield 'mobile center check status' => [
             new MobileCenterCheckStatusRequest(
                 id: '369852017112111347306',
-                serviceAccountId: 0
+                serviceAccountId: 0,
             ),
             [
                 'id' => '369852017112111347306',
@@ -504,13 +504,13 @@ final class RequestDtoTest extends TestCase
         ];
 
         yield 'b2b express checkout' => [
-            new B2BExpressCheckoutRequest('000001', '000002', 100, 'paymentRef', 'http://..../result', 'Vendor', 'req-1'),
+            new B2BExpressCheckoutRequest('000001', '000002', 100, 'paymentRef', 'https://example.com/result', 'Vendor', 'req-1'),
             [
                 'primaryShortCode' => '000001',
                 'receiverShortCode' => '000002',
                 'amount' => 100,
                 'paymentRef' => 'paymentRef',
-                'callbackUrl' => 'http://..../result',
+                'callbackUrl' => 'https://example.com/result',
                 'partnerName' => 'Vendor',
                 'requestRefID' => 'req-1',
             ],
@@ -555,25 +555,25 @@ final class RequestDtoTest extends TestCase
         ];
 
         yield 'bill manager onboarding' => [
-            new BillManagerOnboardingRequest('718003', 'youremail@gmail.com', '0710XXXXXX', 1, 'http://my.server.com/bar/callback', null),
+            new BillManagerOnboardingRequest('718003', 'youremail@gmail.com', '0710XXXXXX', 1, 'https://my.server.com/bar/callback', null),
             [
                 'shortcode' => '718003',
                 'email' => 'youremail@gmail.com',
                 'officialContact' => '0710XXXXXX',
                 'sendReminders' => 1,
-                'callbackurl' => 'http://my.server.com/bar/callback',
+                'callbackurl' => 'https://my.server.com/bar/callback',
             ],
         ];
 
         yield 'bill manager change opt in details' => [
-            new BillManagerChangeOptInDetailsRequest('718003', 'youremail@gmail.com', '0710XXXXXX', 0, 'http://my.server.com/bar/callback', 'image'),
+            new BillManagerChangeOptInDetailsRequest('718003', 'youremail@gmail.com', '0710XXXXXX', 0, 'https://my.server.com/bar/callback', 'image'),
             [
                 'shortcode' => '718003',
                 'email' => 'youremail@gmail.com',
                 'officialContact' => '0710XXXXXX',
                 'sendReminders' => 0,
                 'logo' => 'image',
-                'callbackurl' => 'http://my.server.com/bar/callback',
+                'callbackurl' => 'https://my.server.com/bar/callback',
             ],
         ];
 
@@ -598,7 +598,7 @@ final class RequestDtoTest extends TestCase
                 [
                     new BillManagerInvoiceItemRequest('food', 1000),
                     new BillManagerInvoiceItemRequest('water', 1000),
-                ]
+                ],
             ),
             [
                 'externalReference' => 'INV2345',
@@ -630,7 +630,7 @@ final class RequestDtoTest extends TestCase
                     [
                         new BillManagerInvoiceItemRequest('food', 1000),
                         new BillManagerInvoiceItemRequest('water', 1000),
-                    ]
+                    ],
                 ),
                 new BillManagerSingleInvoiceRequest(
                     '967',
@@ -644,7 +644,7 @@ final class RequestDtoTest extends TestCase
                     [
                         new BillManagerInvoiceItemRequest('food', 1000),
                         new BillManagerInvoiceItemRequest('water', 1000),
-                    ]
+                    ],
                 ),
             ]),
             [
@@ -774,5 +774,45 @@ final class RequestDtoTest extends TestCase
     {
         $this->expectException(ConfigurationException::class);
         new MobileNumberValidationRequest('req-1', '600000', '254700000000', 'ID', '12345678');
+    }
+
+    #[Test]
+    public function itRejectsInsecureCallbackUrls(): void
+    {
+        $this->expectException(ConfigurationException::class);
+
+        new StkPushRequest(
+            '174379',
+            'password',
+            '20260707120000',
+            'CustomerPayBillOnline',
+            1,
+            254708374149,
+            174379,
+            254708374149,
+            'http://example.com/callback',
+            'CompanyXLTD',
+            'Payment',
+        );
+    }
+
+    #[Test]
+    public function itRejectsCallbackUrlsContainingCredentials(): void
+    {
+        $this->expectException(ConfigurationException::class);
+
+        new StkPushRequest(
+            '174379',
+            'password',
+            '20260707120000',
+            'CustomerPayBillOnline',
+            1,
+            254708374149,
+            174379,
+            254708374149,
+            'https://user:password@example.com/callback',
+            'CompanyXLTD',
+            'Payment',
+        );
     }
 }

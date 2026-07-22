@@ -14,7 +14,7 @@ use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
 abstract class AbstractCustomerNumberRequest extends AbstractRequestDto implements RequestDtoInterface
 {
     public function __construct(
-        public readonly string $customerNumber
+        public readonly string $customerNumber,
     ) {
         self::requireNonEmptyString($this->customerNumber, 'customerNumber');
     }

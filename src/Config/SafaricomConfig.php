@@ -18,7 +18,7 @@ final readonly class SafaricomConfig
         public Environment $environment = Environment::Sandbox,
         public int $timeout = 30,
         public int $connectTimeout = 10,
-        public array $defaultHeaders = []
+        public array $defaultHeaders = [],
     ) {
         if ($this->consumerKey === '') {
             throw new ConfigurationException('Safaricom consumer key cannot be empty.');
@@ -28,12 +28,12 @@ final readonly class SafaricomConfig
             throw new ConfigurationException('Safaricom consumer secret cannot be empty.');
         }
 
-        if ($this->timeout < 0) {
-            throw new ConfigurationException('Timeout must be zero or greater.');
+        if ($this->timeout < 1) {
+            throw new ConfigurationException('Timeout must be greater than zero.');
         }
 
-        if ($this->connectTimeout < 0) {
-            throw new ConfigurationException('Connect timeout must be zero or greater.');
+        if ($this->connectTimeout < 1) {
+            throw new ConfigurationException('Connect timeout must be greater than zero.');
         }
     }
 }

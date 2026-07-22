@@ -16,7 +16,7 @@ final class B2bHakikishaRequest extends AbstractRequestDto implements RequestDto
 {
     public function __construct(
         public readonly string $identifierType,
-        public readonly string $identifier
+        public readonly string $identifier,
     ) {
         self::requireNonEmptyString($this->identifierType, 'identifierType');
         self::requireOneOf($this->identifierType, 'identifierType', ['4']);

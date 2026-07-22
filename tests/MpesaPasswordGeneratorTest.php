@@ -18,7 +18,7 @@ final class MpesaPasswordGeneratorTest extends TestCase
 
         self::assertSame(
             base64_encode('174379abc12320260707123456'),
-            MpesaPasswordGenerator::generate('174379', 'abc123', $timestamp)
+            MpesaPasswordGenerator::generate('174379', 'abc123', $timestamp),
         );
     }
 }

@@ -34,7 +34,7 @@ final class BillManagerSingleInvoiceRequest extends AbstractRequestDto implement
         public readonly string $dueDate,
         public readonly string $accountReference,
         public readonly int|string $amount,
-        public readonly ?array $invoiceItems = null
+        public readonly ?array $invoiceItems = null,
     ) {
         self::requireNonEmptyString($this->externalReference, 'externalReference');
         self::requireNonEmptyString($this->billedFullName, 'billedFullName');
@@ -66,8 +66,8 @@ final class BillManagerSingleInvoiceRequest extends AbstractRequestDto implement
             'invoiceItems' => $this->invoiceItems === null
                 ? null
                 : array_map(
-                    static fn (BillManagerInvoiceItemRequest $invoiceItem): array => $invoiceItem->toArray(),
-                    $this->invoiceItems
+                    static fn(BillManagerInvoiceItemRequest $invoiceItem): array => $invoiceItem->toArray(),
+                    $this->invoiceItems,
                 ),
         ]);
     }

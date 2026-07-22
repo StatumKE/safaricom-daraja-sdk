@@ -20,7 +20,7 @@ final class StkPushQueryRequest extends AbstractRequestDto implements RequestDto
         public readonly string $businessShortCode,
         public readonly string $password,
         public readonly string $timestamp,
-        public readonly string $checkoutRequestID
+        public readonly string $checkoutRequestID,
     ) {
         self::requireNonEmptyString($this->businessShortCode, 'businessShortCode');
         self::requireNonEmptyString($this->password, 'password');

@@ -38,15 +38,15 @@ final class B2bPaymentRequest extends AbstractRequestDto implements RequestDtoIn
         public readonly string $remarks,
         public readonly string $queueTimeOutURL,
         public readonly string $resultURL,
-        public readonly ?string $requester = null
+        public readonly ?string $requester = null,
     ) {
         self::requireNonEmptyString($this->initiator, 'initiator');
         self::requireNonEmptyString($this->securityCredential, 'securityCredential');
         self::requireNonEmptyString($this->commandID, 'commandID');
         self::requireNonEmptyString($this->accountReference, 'accountReference');
         self::requireNonEmptyString($this->remarks, 'remarks');
-        self::requireNonEmptyString($this->queueTimeOutURL, 'queueTimeOutURL');
-        self::requireNonEmptyString($this->resultURL, 'resultURL');
+        self::requireHttpsUrl($this->queueTimeOutURL, 'queueTimeOutURL');
+        self::requireHttpsUrl($this->resultURL, 'resultURL');
 
         if ($this->requester !== null) {
             self::requireNonEmptyString($this->requester, 'requester');

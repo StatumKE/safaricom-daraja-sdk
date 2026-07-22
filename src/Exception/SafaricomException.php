@@ -6,6 +6,4 @@ namespace Statum\Safaricom\Daraja\Exception;
 
 use RuntimeException;
 
-class SafaricomException extends RuntimeException
-{
-}
+class SafaricomException extends RuntimeException {}

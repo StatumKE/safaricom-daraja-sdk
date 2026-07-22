@@ -26,12 +26,12 @@ final class B2BExpressCheckoutRequest extends AbstractRequestDto implements Requ
         public readonly string $paymentRef,
         public readonly string $callbackUrl,
         public readonly string $partnerName,
-        public readonly string $requestRefID
+        public readonly string $requestRefID,
     ) {
         self::requireNonEmptyString($this->primaryShortCode, 'primaryShortCode');
         self::requireNonEmptyString($this->receiverShortCode, 'receiverShortCode');
         self::requireNonEmptyString($this->paymentRef, 'paymentRef');
-        self::requireNonEmptyString($this->callbackUrl, 'callbackUrl');
+        self::requireHttpsUrl($this->callbackUrl, 'callbackUrl');
         self::requireNonEmptyString($this->partnerName, 'partnerName');
         self::requireNonEmptyString($this->requestRefID, 'requestRefID');
     }

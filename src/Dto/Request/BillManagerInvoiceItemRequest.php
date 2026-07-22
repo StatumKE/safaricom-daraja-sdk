@@ -16,7 +16,7 @@ final class BillManagerInvoiceItemRequest extends AbstractRequestDto implements 
 {
     public function __construct(
         public readonly string $itemName,
-        public readonly int|string $amount
+        public readonly int|string $amount,
     ) {
         self::requireNonEmptyString($this->itemName, 'itemName');
     }

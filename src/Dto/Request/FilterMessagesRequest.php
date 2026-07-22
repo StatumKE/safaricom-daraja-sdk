@@ -18,7 +18,7 @@ final class FilterMessagesRequest extends AbstractRequestDto implements RequestD
     public function __construct(
         public readonly string $startDate,
         public readonly string $endDate,
-        public readonly string $status
+        public readonly string $status,
     ) {
         self::requireNonEmptyString($this->startDate, 'startDate');
         self::requireNonEmptyString($this->endDate, 'endDate');

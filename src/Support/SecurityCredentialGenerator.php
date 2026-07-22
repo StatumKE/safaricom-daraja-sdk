@@ -40,7 +40,7 @@ final class SecurityCredentialGenerator
 
         if ($publicKey === false) {
             throw new ConfigurationException(
-                'Unable to load the Safaricom public certificate. Provide the certificate as supplied by the portal.'
+                'Unable to load the Safaricom public certificate. Provide the certificate as supplied by the portal.',
             );
         }
 

@@ -14,7 +14,7 @@ use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
 final class GetAllMessagesRequest extends AbstractRequestDto implements RequestDtoInterface
 {
     public function __construct(
-        public readonly string $vpnGroup
+        public readonly string $vpnGroup,
     ) {
         self::requireNonEmptyString($this->vpnGroup, 'vpnGroup');
     }

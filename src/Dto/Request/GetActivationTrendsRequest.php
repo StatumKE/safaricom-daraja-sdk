@@ -20,7 +20,7 @@ final class GetActivationTrendsRequest extends AbstractRequestDto implements Req
         public readonly string $vpnGroup,
         public readonly string $startDate,
         public readonly string $stopDate,
-        public readonly string $username
+        public readonly string $username,
     ) {
         self::requireNonEmptyString($this->vpnGroup, 'vpnGroup');
         self::requireNonEmptyString($this->startDate, 'startDate');

@@ -20,7 +20,7 @@ final class PullQueryRequest extends AbstractRequestDto implements RequestDtoInt
         public readonly string $shortCode,
         public readonly string $startDate,
         public readonly string $endDate,
-        public readonly string $offsetValue
+        public readonly string $offsetValue,
     ) {
         self::requireNonEmptyString($this->shortCode, 'shortCode');
         self::requireNonEmptyString($this->startDate, 'startDate');

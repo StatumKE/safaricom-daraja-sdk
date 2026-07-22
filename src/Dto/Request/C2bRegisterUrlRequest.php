@@ -20,12 +20,12 @@ final class C2bRegisterUrlRequest extends AbstractRequestDto implements RequestD
         public readonly string $shortCode,
         public readonly string $responseType,
         public readonly string $confirmationURL,
-        public readonly string $validationURL
+        public readonly string $validationURL,
     ) {
         self::requireNonEmptyString($this->shortCode, 'shortCode');
         self::requireNonEmptyString($this->responseType, 'responseType');
-        self::requireNonEmptyString($this->confirmationURL, 'confirmationURL');
-        self::requireNonEmptyString($this->validationURL, 'validationURL');
+        self::requireHttpsUrl($this->confirmationURL, 'confirmationURL');
+        self::requireHttpsUrl($this->validationURL, 'validationURL');
     }
 
     public function toArray(): array

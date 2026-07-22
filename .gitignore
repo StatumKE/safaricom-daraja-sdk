@@ -3,4 +3,6 @@
 /.phpunit.result.cache
 /.phpstan
 /.phpstan-cache
+/.php-cs-fixer.cache
+/.npm-cache/
 /composer.lock
