@@ -12,23 +12,17 @@ use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
  * @property-read string $startDate
  * @property-read string $endDate
  * @property-read string $status
- * @property-read string $vpnGroup
- * @property-read string $username
  */
 final class FilterMessagesRequest extends AbstractRequestDto implements RequestDtoInterface
 {
     public function __construct(
         public readonly string $startDate,
         public readonly string $endDate,
-        public readonly string $status,
-        public readonly string $vpnGroup,
-        public readonly string $username
+        public readonly string $status
     ) {
         self::requireNonEmptyString($this->startDate, 'startDate');
         self::requireNonEmptyString($this->endDate, 'endDate');
         self::requireNonEmptyString($this->status, 'status');
-        self::requireNonEmptyString($this->vpnGroup, 'vpnGroup');
-        self::requireNonEmptyString($this->username, 'username');
     }
 
     public function toArray(): array
@@ -37,8 +31,6 @@ final class FilterMessagesRequest extends AbstractRequestDto implements RequestD
             'startDate' => $this->startDate,
             'endDate' => $this->endDate,
             'status' => $this->status,
-            'vpnGroup' => $this->vpnGroup,
-            'username' => $this->username,
         ];
     }
 }

@@ -27,6 +27,22 @@ abstract class AbstractRequestDto
     }
 
     /**
+     * @param list<string> $allowed
+     */
+    protected static function requireOneOf(string $value, string $field, array $allowed): string
+    {
+        if (!in_array($value, $allowed, true)) {
+            throw new ConfigurationException(sprintf(
+                '%s must be one of: %s.',
+                $field,
+                implode(', ', $allowed)
+            ));
+        }
+
+        return $value;
+    }
+
+    /**
      * @param array<string, mixed> $payload
      * @return array<string, mixed>
      */

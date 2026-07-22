@@ -10,27 +10,19 @@ use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
  * Typed request DTO for Safaricom Daraja.
  *
  * @property-read int $id
- * @property-read string $vpnGroup
- * @property-read string $username
  */
 final class DeleteMessageRequest extends AbstractRequestDto implements RequestDtoInterface
 {
     public function __construct(
-        public readonly int $id,
-        public readonly string $vpnGroup,
-        public readonly string $username
+        public readonly int $id
     ) {
         self::requireNonNegativeInt($this->id, 'id');
-        self::requireNonEmptyString($this->vpnGroup, 'vpnGroup');
-        self::requireNonEmptyString($this->username, 'username');
     }
 
     public function toArray(): array
     {
         return [
             'id' => $this->id,
-            'vpnGroup' => $this->vpnGroup,
-            'username' => $this->username,
         ];
     }
 }

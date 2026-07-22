@@ -680,7 +680,7 @@ $response = $client->pullQuery($request);
 
 - Helper: `b2bHakikisha()`
 - DTO: `B2bHakikishaRequest`
-- Required: `identifierType` (must be `"1"` for MSISDN or `"4"` for Shortcode/Organization), `identifier`
+- Required: `identifierType` (must be `"4"` for Shortcode/Organization), `identifier`
 
 ```php
 <?php
@@ -701,7 +701,7 @@ $config = new SafaricomConfig(
 $client = SafaricomClient::create($config);
 $request = new B2bHakikishaRequest(
     identifierType: '4', // Shortcode / Organization
-    identifier: '600984',
+    identifier: '600000',
 );
 
 $response = $client->b2bHakikisha($request);
@@ -786,7 +786,8 @@ $response = $client->standingOrderExternal($request);
 
 - Helper: `searchMessages()`
 - DTO: `SearchMessagesRequest`
-- Required: `searchValue`, `vpnGroup`, `username`
+- Required body fields: `searchValue`
+- Pagination: pass `pageNo` and `pageSize` to `searchMessages()`; the SDK sends them as query parameters.
 
 ```php
 <?php
@@ -807,8 +808,6 @@ $config = new SafaricomConfig(
 $client = SafaricomClient::create($config);
 $request = new SearchMessagesRequest(
     searchValue: 'test',
-    vpnGroup: '1-555162310488_VPN',
-    username: 'user@example.com',
 );
 
 $response = $client->searchMessages($request, pageNo: 1, pageSize: 5);
@@ -818,7 +817,8 @@ $response = $client->searchMessages($request, pageNo: 1, pageSize: 5);
 
 - Helper: `filterMessages()`
 - DTO: `FilterMessagesRequest`
-- Required: `startDate`, `endDate`, `status`, `vpnGroup`, `username`
+- Required body fields: `startDate`, `endDate`, `status`
+- Pagination: pass `pageNo` and `pageSize` to `filterMessages()`; the SDK sends them as query parameters.
 
 ```php
 <?php
@@ -841,8 +841,6 @@ $request = new FilterMessagesRequest(
     startDate: '2026-07-01',
     endDate: '2026-07-07',
     status: 'OPEN',
-    vpnGroup: '1-555162310488_VPN',
-    username: 'user@example.com',
 );
 
 $response = $client->filterMessages($request, pageNo: 1, pageSize: 10);
@@ -852,7 +850,7 @@ $response = $client->filterMessages($request, pageNo: 1, pageSize: 10);
 
 - Helper: `deleteMessageThread()`
 - DTO: `DeleteMessageThreadRequest`
-- Required: `msisdn`, `vpnGroup`, `username`
+- Required: `msisdn`
 
 ```php
 <?php
@@ -873,8 +871,6 @@ $config = new SafaricomConfig(
 $client = SafaricomClient::create($config);
 $request = new DeleteMessageThreadRequest(
     msisdn: '254700000000',
-    vpnGroup: '1-555162310488_VPN',
-    username: 'user@example.com',
 );
 
 $response = $client->deleteMessageThread($request);
@@ -912,7 +908,7 @@ $response = $client->getAllMessages($request, pageNo: 1, pageSize: 10);
 
 - Helper: `sendSingleMessage()`
 - DTO: `SendSingleMessageRequest`
-- Required: `msisdn`, `message`, `vpnGroup`, `username`
+- Required: `msisdn`, `message`, `vpnGroup`
 
 ```php
 <?php
@@ -935,7 +931,6 @@ $request = new SendSingleMessageRequest(
     msisdn: '254700000000',
     message: 'Hello',
     vpnGroup: '1-555162310488_VPN',
-    username: 'user@example.com',
 );
 
 $response = $client->sendSingleMessage($request);
@@ -945,7 +940,7 @@ $response = $client->sendSingleMessage($request);
 
 - Helper: `deleteMessage()`
 - DTO: `DeleteMessageRequest`
-- Required: `id`, `vpnGroup`, `username`
+- Required: `id`
 
 ```php
 <?php
@@ -966,8 +961,6 @@ $config = new SafaricomConfig(
 $client = SafaricomClient::create($config);
 $request = new DeleteMessageRequest(
     id: 1,
-    vpnGroup: '1-555162310488_VPN',
-    username: 'user@example.com',
 );
 
 $response = $client->deleteMessage($request);

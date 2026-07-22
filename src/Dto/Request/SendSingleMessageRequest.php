@@ -12,20 +12,17 @@ use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
  * @property-read string $msisdn
  * @property-read string $message
  * @property-read string $vpnGroup
- * @property-read string $username
  */
 final class SendSingleMessageRequest extends AbstractRequestDto implements RequestDtoInterface
 {
     public function __construct(
         public readonly string $msisdn,
         public readonly string $message,
-        public readonly string $vpnGroup,
-        public readonly string $username
+        public readonly string $vpnGroup
     ) {
         self::requireNonEmptyString($this->msisdn, 'msisdn');
         self::requireNonEmptyString($this->message, 'message');
         self::requireNonEmptyString($this->vpnGroup, 'vpnGroup');
-        self::requireNonEmptyString($this->username, 'username');
     }
 
     public function toArray(): array
@@ -34,7 +31,6 @@ final class SendSingleMessageRequest extends AbstractRequestDto implements Reque
             'msisdn' => $this->msisdn,
             'message' => $this->message,
             'vpnGroup' => $this->vpnGroup,
-            'username' => $this->username,
         ];
     }
 }

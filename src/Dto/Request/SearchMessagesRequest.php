@@ -10,27 +10,19 @@ use Statum\Safaricom\Daraja\Contract\RequestDtoInterface;
  * Typed request DTO for Safaricom Daraja.
  *
  * @property-read string $searchValue
- * @property-read string $vpnGroup
- * @property-read string $username
  */
 final class SearchMessagesRequest extends AbstractRequestDto implements RequestDtoInterface
 {
     public function __construct(
-        public readonly string $searchValue,
-        public readonly string $vpnGroup,
-        public readonly string $username
+        public readonly string $searchValue
     ) {
         self::requireNonEmptyString($this->searchValue, 'searchValue');
-        self::requireNonEmptyString($this->vpnGroup, 'vpnGroup');
-        self::requireNonEmptyString($this->username, 'username');
     }
 
     public function toArray(): array
     {
         return [
             'searchValue' => $this->searchValue,
-            'vpnGroup' => $this->vpnGroup,
-            'username' => $this->username,
         ];
     }
 }

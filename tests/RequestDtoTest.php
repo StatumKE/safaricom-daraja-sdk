@@ -271,20 +271,20 @@ final class RequestDtoTest extends TestCase
         ];
 
         yield 'b2b kuhakikisha' => [
-            new B2bHakikishaRequest('MSISDN', '254700000000'),
+            new B2bHakikishaRequest('4', '600000'),
             [
-                'IdentifierType' => 'MSISDN',
-                'Identifier' => '254700000000',
+                'IdentifierType' => '4',
+                'Identifier' => '600000',
             ],
         ];
 
         yield 'mobile validation' => [
-            new MobileNumberValidationRequest('req-1', '600000', '254700000000', 'ID', '12345678'),
+            new MobileNumberValidationRequest('req-1', '600000', '254700000000', '01', '12345678'),
             [
                 'requestRefID' => 'req-1',
                 'shortCode' => '600000',
                 'msisdn' => '254700000000',
-                'idType' => 'ID',
+                'idType' => '01',
                 'idNumber' => '12345678',
             ],
         ];
@@ -308,31 +308,25 @@ final class RequestDtoTest extends TestCase
         ];
 
         yield 'search messages' => [
-            new SearchMessagesRequest('test', '1-555162310488_VPN', 'user@example.com'),
+            new SearchMessagesRequest('test'),
             [
                 'searchValue' => 'test',
-                'vpnGroup' => '1-555162310488_VPN',
-                'username' => 'user@example.com',
             ],
         ];
 
         yield 'filter messages' => [
-            new FilterMessagesRequest('2026-07-01', '2026-07-07', 'OPEN', '1-555162310488_VPN', 'user@example.com'),
+            new FilterMessagesRequest('2026-07-01', '2026-07-07', 'OPEN'),
             [
                 'startDate' => '2026-07-01',
                 'endDate' => '2026-07-07',
                 'status' => 'OPEN',
-                'vpnGroup' => '1-555162310488_VPN',
-                'username' => 'user@example.com',
             ],
         ];
 
         yield 'delete thread' => [
-            new DeleteMessageThreadRequest('254700000000', '1-555162310488_VPN', 'user@example.com'),
+            new DeleteMessageThreadRequest('254700000000'),
             [
                 'msisdn' => '254700000000',
-                'vpnGroup' => '1-555162310488_VPN',
-                'username' => 'user@example.com',
             ],
         ];
 
@@ -344,21 +338,18 @@ final class RequestDtoTest extends TestCase
         ];
 
         yield 'send single message' => [
-            new SendSingleMessageRequest('254700000000', 'Hello', '1-555162310488_VPN', 'user@example.com'),
+            new SendSingleMessageRequest('254700000000', 'Hello', '1-555162310488_VPN'),
             [
                 'msisdn' => '254700000000',
                 'message' => 'Hello',
                 'vpnGroup' => '1-555162310488_VPN',
-                'username' => 'user@example.com',
             ],
         ];
 
         yield 'delete message' => [
-            new DeleteMessageRequest(1, '1-555162310488_VPN', 'user@example.com'),
+            new DeleteMessageRequest(1),
             [
                 'id' => 1,
-                'vpnGroup' => '1-555162310488_VPN',
-                'username' => 'user@example.com',
             ],
         ];
 
@@ -742,5 +733,19 @@ final class RequestDtoTest extends TestCase
     {
         $this->expectException(ConfigurationException::class);
         new MobileCenterCheckStatusRequest('369852017112111347306', -1);
+    }
+
+    #[Test]
+    public function itValidatesB2bHakikishaIdentifierTypeAgainstSandboxAcceptedValue(): void
+    {
+        $this->expectException(ConfigurationException::class);
+        new B2bHakikishaRequest('1', '254700000000');
+    }
+
+    #[Test]
+    public function itValidatesMobileNumberValidationIdTypeAgainstDocumentedValues(): void
+    {
+        $this->expectException(ConfigurationException::class);
+        new MobileNumberValidationRequest('req-1', '600000', '254700000000', 'ID', '12345678');
     }
 }

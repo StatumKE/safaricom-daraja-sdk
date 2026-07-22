@@ -182,8 +182,8 @@ Verify organization shortcode ownership before transferring funds:
 use Statum\Safaricom\Daraja\Dto\Request\B2bHakikishaRequest;
 
 $request = new B2bHakikishaRequest(
-    identifierType: '4', // IMPORTANT: Use string '4' for Shortcode, '1' for MSISDN
-    identifier: '600984'
+    identifierType: '4', // IMPORTANT: Use string '4' for Shortcode / Organization
+    identifier: '600000'
 );
 $response = $client->b2bHakikisha($request);
 print_r($response->json());

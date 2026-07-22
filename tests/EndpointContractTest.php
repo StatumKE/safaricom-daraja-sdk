@@ -178,12 +178,12 @@ final class EndpointContractTest extends TestCase
         ];
 
         yield 'b2b hakikisha' => [
-            static fn (SafaricomClient $client): mixed => $client->b2bHakikisha(new B2bHakikishaRequest('MSISDN', '254700000000')),
+            static fn (SafaricomClient $client): mixed => $client->b2bHakikisha(new B2bHakikishaRequest('4', '600000')),
             '/sfcverify/v1/query/info',
         ];
 
         yield 'mobile number validation' => [
-            static fn (SafaricomClient $client): mixed => $client->mobileNumberValidation(new MobileNumberValidationRequest('req-1', '600000', '254700000000', 'ID', '12345678')),
+            static fn (SafaricomClient $client): mixed => $client->mobileNumberValidation(new MobileNumberValidationRequest('req-1', '600000', '254700000000', '01', '12345678')),
             '/v1/KYC-validation/validateID',
         ];
 
@@ -193,17 +193,17 @@ final class EndpointContractTest extends TestCase
         ];
 
         yield 'search messages' => [
-            static fn (SafaricomClient $client): mixed => $client->searchMessages(new SearchMessagesRequest('test', '1-555162310488_VPN', 'user@example.com'), 1, 5),
+            static fn (SafaricomClient $client): mixed => $client->searchMessages(new SearchMessagesRequest('test'), 1, 5),
             '/simportal/v1/searchmessages?pageNo=1&pageSize=5',
         ];
 
         yield 'filter messages' => [
-            static fn (SafaricomClient $client): mixed => $client->filterMessages(new FilterMessagesRequest('2026-07-01', '2026-07-07', 'OPEN', '1-555162310488_VPN', 'user@example.com'), 1, 10),
+            static fn (SafaricomClient $client): mixed => $client->filterMessages(new FilterMessagesRequest('2026-07-01', '2026-07-07', 'OPEN'), 1, 10),
             '/simportal/v1/filtermessages?pageNo=1&pageSize=10',
         ];
 
         yield 'delete message thread' => [
-            static fn (SafaricomClient $client): mixed => $client->deleteMessageThread(new DeleteMessageThreadRequest('254700000000', '1-555162310488_VPN', 'user@example.com')),
+            static fn (SafaricomClient $client): mixed => $client->deleteMessageThread(new DeleteMessageThreadRequest('254700000000')),
             '/simportal/v1/deleteMessageThread',
         ];
 
@@ -213,12 +213,12 @@ final class EndpointContractTest extends TestCase
         ];
 
         yield 'send single message' => [
-            static fn (SafaricomClient $client): mixed => $client->sendSingleMessage(new SendSingleMessageRequest('254700000000', 'Hello', '1-555162310488_VPN', 'user@example.com')),
+            static fn (SafaricomClient $client): mixed => $client->sendSingleMessage(new SendSingleMessageRequest('254700000000', 'Hello', '1-555162310488_VPN')),
             '/simportal/v1/sendsinglemessage',
         ];
 
         yield 'delete message' => [
-            static fn (SafaricomClient $client): mixed => $client->deleteMessage(new DeleteMessageRequest(1, '1-555162310488_VPN', 'user@example.com')),
+            static fn (SafaricomClient $client): mixed => $client->deleteMessage(new DeleteMessageRequest(1)),
             '/simportal/v1/deletemessage',
         ];
 

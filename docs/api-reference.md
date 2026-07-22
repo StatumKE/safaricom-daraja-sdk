@@ -516,7 +516,7 @@ Used to lookup and verify organization metadata (name, tariff) before executing 
 
 | SDK Parameter | Wire Key | Type | Required | Description / Constraints |
 | :--- | :--- | :--- | :--- | :--- |
-| `identifierType` | `IdentifierType` | `string` | Yes | Use `'4'` for Organization Shortcode, or `'1'` for MSISDN |
+| `identifierType` | `IdentifierType` | `string` | Yes | Use `'4'` for Organization Shortcode |
 | `identifier` | `Identifier` | `string` | Yes | Organization shortcode or phone number being queried |
 
 ### Example Wire Payloads
@@ -527,7 +527,7 @@ Used to lookup and verify organization metadata (name, tariff) before executing 
 ```json
 {
   "IdentifierType": "4",
-  "Identifier": "600984"
+  "Identifier": "600000"
 }
 ```
 </details>
@@ -541,8 +541,8 @@ Used to lookup and verify organization metadata (name, tariff) before executing 
   "ResponseCode": "4000",
   "ResponseMessage": "Success",
   "DetailedMessage": "Request received successfully",
-  "OrganizationShortCode": "600984",
-  "OrganizationName": "Safaricom Daraja 984",
+  "OrganizationShortCode": "600000",
+  "OrganizationName": "Safaricom Daraja",
   "ChargeProfileID": "20013"
 }
 ```
@@ -670,20 +670,20 @@ Used for IoT SIM and SMS thread management via the Safaricom SIM Portal APIs.
 
 | DTO Class | Required Parameters | Description |
 | :--- | :--- | :--- |
-| `SearchMessagesRequest` | `searchValue`, `vpnGroup`, `username` | Search SIM thread messages. |
-| `FilterMessagesRequest` | `startDate`, `endDate`, `status`, `vpnGroup`, `username` | Filter message threads by date/status. |
-| `DeleteMessageThreadRequest`| `threadId`, `vpnGroup`, `username` | Delete a message thread. |
-| `GetAllMessagesRequest` | `vpnGroup`, `username` | Get all messages. |
-| `SendSingleMessageRequest` | `msisdn`, `message`, `vpnGroup`, `username` | Send a single message to a SIM. |
-| `DeleteMessageRequest` | `messageId`, `vpnGroup`, `username` | Delete a single message by ID. |
-| `AllSimsRequest` | `vpnGroup` | List all SIMs in group. |
+| `SearchMessagesRequest` | `searchValue` | Search SIM thread messages. Pass `pageNo` and `pageSize` to `searchMessages()` for pagination. |
+| `FilterMessagesRequest` | `startDate`, `endDate`, `status` | Filter message threads by date/status. Pass `pageNo` and `pageSize` to `filterMessages()` for pagination. |
+| `DeleteMessageThreadRequest`| `msisdn` | Delete a message thread. |
+| `GetAllMessagesRequest` | `vpnGroup` | Get all messages. Pass `pageNo` and `pageSize` to `getAllMessages()` for pagination. |
+| `SendSingleMessageRequest` | `msisdn`, `message`, `vpnGroup` | Send a single message to a SIM. |
+| `DeleteMessageRequest` | `id` | Delete a single message by ID. |
+| `AllSimsRequest` | `vpnGroup`, `startAtIndex`, `pageSize`, `username` | List all SIMs in group. |
 | `QueryLifecycleStatusRequest`| `msisdn`, `vpnGroup`, `username` | Check SIM active/suspended state. |
 | `QueryCustomerInfoRequest` | `msisdn`, `vpnGroup`, `username` | Retrieve customer details. |
 | `SimActivationRequest` | `msisdn`, `vpnGroup`, `username` | Request SIM activation. |
-| `GetActivationTrendsRequest`| `startDate`, `endDate`, `vpnGroup`, `username` | Get SIM activation trends. |
-| `RenameAssetRequest` | `msisdn`, `newName`, `vpnGroup`, `username` | Rename an active SIM asset. |
+| `GetActivationTrendsRequest`| `vpnGroup`, `startDate`, `stopDate`, `username` | Get SIM activation trends. |
+| `RenameAssetRequest` | `msisdn`, `vpnGroup`, `username`, `assetName` | Rename an active SIM asset. |
 | `GetLocationInfoRequest` | `msisdn`, `vpnGroup`, `username` | Request SIM location info. |
-| `SuspendUnsuspendSubRequest`| `msisdn`, `action`, `vpnGroup`, `username` | Suspend or unsuspend a SIM subscription. |
+| `SuspendUnsuspendSubRequest`| `msisdn`, `username`, `vpnGroup`, `product`, `operation` | Suspend or unsuspend a SIM subscription. |
 | `SwapCheckAtiRequest` | `customerNumber` | SWAP Check ATI check. |
 
 ---

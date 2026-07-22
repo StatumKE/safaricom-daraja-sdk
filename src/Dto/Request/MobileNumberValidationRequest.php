@@ -28,6 +28,7 @@ final class MobileNumberValidationRequest extends AbstractRequestDto implements 
         self::requireNonEmptyString($this->shortCode, 'shortCode');
         self::requireNonEmptyString($this->msisdn, 'msisdn');
         self::requireNonEmptyString($this->idType, 'idType');
+        self::requireOneOf($this->idType, 'idType', ['01', '02', '05']);
         self::requireNonEmptyString($this->idNumber, 'idNumber');
     }
 
